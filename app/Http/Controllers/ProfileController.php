@@ -15,7 +15,8 @@ class ProfileController extends Controller
     public function show()
     {
         $user = auth()->user();
-        return view('profile.show', compact('user'));
+        $recentTasks = $user->tasks()->latest()->take(5)->get();
+        return view('profile.show', compact('user', 'recentTasks'));
     }
 
     /**
@@ -34,17 +35,19 @@ class ProfileController extends Controller
     {
         $user = auth()->user();
 
-        $request->validate([
-            'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'first_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
+        // Validate based on what's being updated
+        $rules = [
+            'email' => ['sometimes', 'required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'first_name' => ['sometimes', 'required', 'string', 'max:255'],
+            'last_name' => ['sometimes', 'required', 'string', 'max:255'],
             'bio' => ['nullable', 'string', 'max:1000'],
             'interests' => ['nullable', 'string', 'max:500'],
             'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'current_password' => ['nullable', 'string'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-        ]);
+        ];
+
+        $request->validate($rules);
 
         // Handle profile picture upload
         if ($request->hasFile('profile_picture')) {
@@ -57,13 +60,22 @@ class ProfileController extends Controller
             $user->profile_picture = $path;
         }
 
-        // Update basic information
-        $user->username = $request->username;
-        $user->email = $request->email;
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->bio = $request->bio;
-        $user->interests = $request->interests;
+        // Update basic information only if provided
+        if ($request->filled('email')) {
+            $user->email = $request->email;
+        }
+        if ($request->filled('first_name')) {
+            $user->first_name = $request->first_name;
+        }
+        if ($request->filled('last_name')) {
+            $user->last_name = $request->last_name;
+        }
+        if ($request->has('bio')) {
+            $user->bio = $request->bio;
+        }
+        if ($request->has('interests')) {
+            $user->interests = $request->interests;
+        }
 
         // Update password if provided
         if ($request->filled('password')) {

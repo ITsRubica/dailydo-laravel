@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>dailydo - Register</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-  <link rel="stylesheet" href="{{ asset('assets/style.css') }}">
+  <link rel="stylesheet" href="<?php echo e(asset('assets/style.css')); ?>">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- SweetAlert2 -->
@@ -16,23 +16,23 @@
   <!-- NAVBAR -->
   <nav class="navbar">
     <div class="navbar-container">
-      <a href="{{ auth()->check() ? route('dashboard') : url('/') }}" class="navbar-logo">dailydo</a>
+      <a href="<?php echo e(auth()->check() ? route('dashboard') : url('/')); ?>" class="navbar-logo">dailydo</a>
       <button class="navbar-toggle">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
       <ul class="navbar-menu">
-        <li><a href="{{ url('/') }}">Home</a></li>
-        <li><a href="{{ route('login') }}">Login</a></li>
-        @auth
+        <li><a href="<?php echo e(url('/')); ?>">Home</a></li>
+        <li><a href="<?php echo e(route('login')); ?>">Login</a></li>
+        <?php if(auth()->guard()->check()): ?>
         <li>
-            <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                @csrf
+            <form action="<?php echo e(route('logout')); ?>" method="POST" class="d-inline">
+                <?php echo csrf_field(); ?>
                 <button type="submit" class="btn btn-link p-0" style="color: #ff6b6b; text-decoration: none; border: none; background: none;">Logout</button>
             </form>
         </li>
-        @endauth
+        <?php endif; ?>
       </ul>
     </div>
   </nav>
@@ -43,29 +43,29 @@
       <h2>Create Account</h2>
       <p>Join us to manage your tasks</p>
       
-      @if ($errors->any())
+      <?php if($errors->any()): ?>
         <div class="alert alert-danger">
             <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
+                <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li><?php echo e($error); ?></li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </ul>
         </div>
-      @endif
+      <?php endif; ?>
 
-      <form method="POST" action="{{ route('register') }}" class="register-form">
-        @csrf
+      <form method="POST" action="<?php echo e(route('register')); ?>" class="register-form">
+        <?php echo csrf_field(); ?>
         <div class="form-group">
-          <input type="text" name="first_name" placeholder="First Name" value="{{ old('first_name') }}" required>
+          <input type="text" name="first_name" placeholder="First Name" value="<?php echo e(old('first_name')); ?>" required>
         </div>
         <div class="form-group">
-          <input type="text" name="last_name" placeholder="Last Name" value="{{ old('last_name') }}" required>
+          <input type="text" name="last_name" placeholder="Last Name" value="<?php echo e(old('last_name')); ?>" required>
         </div>
         <div class="form-group">
-          <input type="text" name="username" placeholder="Username" value="{{ old('username') }}" required>
+          <input type="text" name="username" placeholder="Username" value="<?php echo e(old('username')); ?>" required>
         </div>
         <div class="form-group">
-          <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+          <input type="email" name="email" placeholder="Email" value="<?php echo e(old('email')); ?>" required>
         </div>
         <div class="form-group">
           <input type="password" name="password" placeholder="Password" required>
@@ -77,7 +77,7 @@
       </form>
       
       <div class="register-link">
-        <p>Already have an account? <a href="{{ route('login') }}">Login here</a></p>
+        <p>Already have an account? <a href="<?php echo e(route('login')); ?>">Login here</a></p>
       </div>
     </div>
   </section>
@@ -94,24 +94,25 @@
     });
 
     // Show success message if registration is successful
-    @if(session('success'))
+    <?php if(session('success')): ?>
         Swal.fire({
             icon: 'success',
             title: 'Registration Successful',
-            text: '{{ session('success') }}'
+            text: '<?php echo e(session('success')); ?>'
         }).then(() => {
-            window.location.href = '{{ route('login') }}';
+            window.location.href = '<?php echo e(route('login')); ?>';
         });
-    @endif
+    <?php endif; ?>
 
     // Show error message if registration fails
-    @if($errors->any())
+    <?php if($errors->any()): ?>
         Swal.fire({
             icon: 'error',
             title: 'Registration Failed',
-            text: '{{ $errors->first() }}'
+            text: '<?php echo e($errors->first()); ?>'
         });
-    @endif
+    <?php endif; ?>
   </script>
 </body>
 </html>
+<?php /**PATH D:\dailydo-laravel\dailydo-laravel\resources\views/auth/register.blade.php ENDPATH**/ ?>

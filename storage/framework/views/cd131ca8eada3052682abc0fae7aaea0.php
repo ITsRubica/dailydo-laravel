@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Dashboard - DailyDo')
 
-@section('content')
+<?php $__env->startSection('title', 'Dashboard - DailyDo'); ?>
+
+<?php $__env->startSection('content'); ?>
 <!-- TOAST NOTIFICATION -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
     <div id="successToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" style="background: #896C6C;">
@@ -24,7 +24,7 @@
             <div class="col-12">
                 <h1 class="fw-bold mb-1">
                     <i class="bi bi-stars me-2" style="color: #896C6C;"></i>
-                    Welcome to your task space, <span id="userName">{{ auth()->user()->first_name }}</span>!
+                    Welcome to your task space, <span id="userName"><?php echo e(auth()->user()->first_name); ?></span>!
                 </h1>
                 <p class="text-muted fs-5">Stay organized and productive with DailyDo</p>
             </div>
@@ -39,8 +39,8 @@
                             <i class="bi bi-plus-circle-fill me-2" style="color: #896C6C; font-size: 1.5rem;"></i>
                             <h4 class="mb-0 fw-bold" style="color: #333; font-size: 1.15rem;">Quick Add Task</h4>
                         </div>
-                        <form id="quickAddForm" action="{{ route('tasks.store') }}" method="POST">
-                            @csrf
+                        <form id="quickAddForm" action="<?php echo e(route('tasks.store')); ?>" method="POST">
+                            <?php echo csrf_field(); ?>
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <input type="text" class="form-control form-control-lg" name="title" id="taskTitle" placeholder="What needs to be done?" required style="border-radius: 15px; border: 2px solid #DDDAD0;">
@@ -75,11 +75,11 @@
                         <h3 class="fw-bold mb-2" style="font-size: 1.25rem;">Today's Progress</h3>
                         <div class="row text-center">
                             <div class="col-6">
-                                <h2 class="fw-bold mb-0" id="pendingCount">{{ $pendingTasks ?? 0 }}</h2>
+                                <h2 class="fw-bold mb-0" id="pendingCount"><?php echo e($pendingTasks ?? 0); ?></h2>
                                 <small class="opacity-75">Pending</small>
                             </div>
                             <div class="col-6">
-                                <h2 class="fw-bold mb-0" id="completedCount">{{ $completedTasks ?? 0 }}</h2>
+                                <h2 class="fw-bold mb-0" id="completedCount"><?php echo e($completedTasks ?? 0); ?></h2>
                                 <small class="opacity-75">Completed</small>
                             </div>
                         </div>
@@ -98,22 +98,22 @@
                     </div>
                     <div class="card-body px-3 pb-3">
                         <div id="todayTasks">
-                            @forelse($todayTasks ?? [] as $task)
-                                <div class="task-item mb-3 p-3 rounded-3" style="{{ $task->reminder ? 'background: rgba(137, 108, 108, 0.1); border-radius: 10px; border-left: 4px solid #896C6C;' : 'background: rgba(241, 240, 228, 0.3); border-radius: 10px;' }}">
+                            <?php $__empty_1 = true; $__currentLoopData = $todayTasks ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <div class="task-item mb-3 p-3 rounded-3" style="<?php echo e($task->reminder ? 'background: rgba(137, 108, 108, 0.1); border-radius: 10px; border-left: 4px solid #896C6C;' : 'background: rgba(241, 240, 228, 0.3); border-radius: 10px;'); ?>">
                                     <div class="d-flex align-items-center">
-                                        <input type="checkbox" class="form-check-input me-3 task-checkbox" style="transform: scale(1.2);" {{ $task->status === 'completed' ? 'checked' : '' }} onchange="toggleTaskCompletion(this, {{ $task->id }})">
+                                        <input type="checkbox" class="form-check-input me-3 task-checkbox" style="transform: scale(1.2);" <?php echo e($task->status === 'completed' ? 'checked' : ''); ?> onchange="toggleTaskCompletion(this, <?php echo e($task->id); ?>)">
                                         <div class="flex-grow-1">
-                                            <h6 class="mb-1 task-title" style="{{ $task->status === 'completed' ? 'text-decoration: line-through; opacity: 0.6;' : '' }}">{{ $task->title }}</h6>
-                                            <small class="text-muted task-due" style="{{ $task->status === 'completed' ? 'opacity: 0.6;' : '' }}">Due: {{ $task->deadline ? $task->deadline->format('M d, Y h:i A') : 'No due date' }}</small>
+                                            <h6 class="mb-1 task-title" style="<?php echo e($task->status === 'completed' ? 'text-decoration: line-through; opacity: 0.6;' : ''); ?>"><?php echo e($task->title); ?></h6>
+                                            <small class="text-muted task-due" style="<?php echo e($task->status === 'completed' ? 'opacity: 0.6;' : ''); ?>">Due: <?php echo e($task->deadline ? $task->deadline->format('M d, Y h:i A') : 'No due date'); ?></small>
                                         </div>
-                                        @if($task->reminder)
+                                        <?php if($task->reminder): ?>
                                             <span class="badge" style="background: #896C6C;"><i class="bi bi-bell-fill"></i></span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <p class="text-muted text-center">No tasks for today</p>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -130,22 +130,22 @@
                     </div>
                     <div class="card-body px-3 pb-3">
                         <div id="upcomingTasks">
-                            @forelse($upcomingTasks ?? [] as $task)
-                                <div class="task-item mb-3 p-3 rounded-3" style="{{ $task->reminder ? 'background: rgba(137, 108, 108, 0.1); border-radius: 10px; border-left: 4px solid #896C6C;' : 'background: rgba(241, 240, 228, 0.3); border-radius: 10px;' }}">
+                            <?php $__empty_1 = true; $__currentLoopData = $upcomingTasks ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <div class="task-item mb-3 p-3 rounded-3" style="<?php echo e($task->reminder ? 'background: rgba(137, 108, 108, 0.1); border-radius: 10px; border-left: 4px solid #896C6C;' : 'background: rgba(241, 240, 228, 0.3); border-radius: 10px;'); ?>">
                                     <div class="d-flex align-items-center">
-                                        <input type="checkbox" class="form-check-input me-3 task-checkbox" style="transform: scale(1.2);" {{ $task->status === 'completed' ? 'checked' : '' }} onchange="toggleTaskCompletion(this, {{ $task->id }})">
+                                        <input type="checkbox" class="form-check-input me-3 task-checkbox" style="transform: scale(1.2);" <?php echo e($task->status === 'completed' ? 'checked' : ''); ?> onchange="toggleTaskCompletion(this, <?php echo e($task->id); ?>)">
                                         <div class="flex-grow-1">
-                                            <h6 class="mb-1 task-title" style="{{ $task->status === 'completed' ? 'text-decoration: line-through; opacity: 0.6;' : '' }}">{{ $task->title }}</h6>
-                                            <small class="text-muted task-due" style="{{ $task->status === 'completed' ? 'opacity: 0.6;' : '' }}">Due: {{ $task->deadline ? $task->deadline->format('M d, Y h:i A') : 'No due date' }}</small>
+                                            <h6 class="mb-1 task-title" style="<?php echo e($task->status === 'completed' ? 'text-decoration: line-through; opacity: 0.6;' : ''); ?>"><?php echo e($task->title); ?></h6>
+                                            <small class="text-muted task-due" style="<?php echo e($task->status === 'completed' ? 'opacity: 0.6;' : ''); ?>">Due: <?php echo e($task->deadline ? $task->deadline->format('M d, Y h:i A') : 'No due date'); ?></small>
                                         </div>
-                                        @if($task->reminder)
+                                        <?php if($task->reminder): ?>
                                             <span class="badge" style="background: #896C6C;"><i class="bi bi-bell-fill"></i></span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-                            @empty
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <p class="text-muted text-center">No upcoming tasks</p>
-                            @endforelse
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
     </div>
 </section>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     // Function to show toast notification
     function showToast(message) {
@@ -184,7 +184,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                 },
                 body: JSON.stringify({
                     status: newStatus
@@ -251,7 +251,7 @@
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
             }
         })
         .then(response => response.json())
@@ -272,5 +272,7 @@
         });
     });
 </script>
-@endpush
-@endsection
+<?php $__env->stopPush(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\dailydo-laravel\dailydo-laravel\resources\views/dashboard.blade.php ENDPATH**/ ?>

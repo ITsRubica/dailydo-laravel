@@ -59,4 +59,12 @@ class DashboardController extends Controller
             'completionRate'
         ));
     }
+
+    /**
+     * Display the calendar view.
+     */
+    public function calendar()
+    {
+        return view('calendar');
+    }
 }

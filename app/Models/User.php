@@ -26,6 +26,7 @@ class User extends Authenticatable
         'bio',
         'interests',
         'profile_picture',
+        'current_streak',
         'role',
     ];
 

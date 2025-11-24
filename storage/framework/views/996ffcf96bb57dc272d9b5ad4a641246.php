@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Task List - DailyDo')
 
-@section('content')
+<?php $__env->startSection('title', 'Task List - DailyDo'); ?>
+
+<?php $__env->startSection('content'); ?>
 <!-- TOAST NOTIFICATION -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
     <div id="successToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" style="background: #896C6C;">
@@ -39,13 +39,13 @@
                     <li class="nav-item" role="presentation" style="flex: 1;">
                         <button class="nav-link active w-100 fw-bold" id="active-tab" data-bs-toggle="pill" data-bs-target="#active-tasks" type="button" role="tab" aria-controls="active-tasks" aria-selected="true" style="border-radius: 8px; background: #896C6C; color: white; border: none; padding: 8px 12px; transition: all 0.3s ease; font-size: 0.85rem;">
                             <i class="bi bi-list-task me-1"></i>Active Tasks
-                            <span class="badge ms-1" id="activeTaskCount" style="background: rgba(255,255,255,0.3); color: white; font-size: 0.75rem;">{{ $tasks->where('status', 'pending')->count() }}</span>
+                            <span class="badge ms-1" id="activeTaskCount" style="background: rgba(255,255,255,0.3); color: white; font-size: 0.75rem;"><?php echo e($tasks->where('status', 'pending')->count()); ?></span>
                         </button>
                     </li>
                     <li class="nav-item" role="presentation" style="flex: 1;">
                         <button class="nav-link w-100 fw-bold" id="completed-tab" data-bs-toggle="pill" data-bs-target="#completed-tasks" type="button" role="tab" aria-controls="completed-tasks" aria-selected="false" style="border-radius: 8px; color: #6c757d; border: none; padding: 8px 12px; transition: all 0.3s ease; font-size: 0.85rem;">
                             <i class="bi bi-check-circle me-1"></i>Completed Tasks
-                            <span class="badge ms-1" id="completedTaskCount" style="background: #6c757d; color: white; font-size: 0.75rem;">{{ $tasks->where('status', 'completed')->count() }}</span>
+                            <span class="badge ms-1" id="completedTaskCount" style="background: #6c757d; color: white; font-size: 0.75rem;"><?php echo e($tasks->where('status', 'completed')->count()); ?></span>
                         </button>
                     </li>
                 </ul>
@@ -77,40 +77,40 @@
                     <!-- Active Tasks Tab -->
                     <div class="tab-pane fade show active" id="active-tasks" role="tabpanel" aria-labelledby="active-tab">
                         <div id="activeTasksContainer">
-                            @php
+                            <?php
                                 $activeTasks = $tasks->where('status', 'pending');
-                            @endphp
-                            @if($activeTasks->count() > 0)
-                                @foreach($activeTasks as $task)
-                                    @include('tasks.partials.task-card', ['task' => $task])
-                                @endforeach
-                            @else
+                            ?>
+                            <?php if($activeTasks->count() > 0): ?>
+                                <?php $__currentLoopData = $activeTasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php echo $__env->make('tasks.partials.task-card', ['task' => $task], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php else: ?>
                                 <div class="text-center py-4">
                                     <i class="bi bi-list-task" style="font-size: 3rem; color: #ccc;"></i>
                                     <h5 class="mt-2 text-muted" style="font-size: 1rem;">No active tasks</h5>
                                     <p class="text-muted mb-0" style="font-size: 0.85rem;">Add your first task to get started!</p>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                     
                     <!-- Completed Tasks Tab -->
                     <div class="tab-pane fade" id="completed-tasks" role="tabpanel" aria-labelledby="completed-tab">
                         <div id="completedTasksContainer">
-                            @php
+                            <?php
                                 $completedTasks = $tasks->where('status', 'completed');
-                            @endphp
-                            @if($completedTasks->count() > 0)
-                                @foreach($completedTasks as $task)
-                                    @include('tasks.partials.task-card', ['task' => $task])
-                                @endforeach
-                            @else
+                            ?>
+                            <?php if($completedTasks->count() > 0): ?>
+                                <?php $__currentLoopData = $completedTasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php echo $__env->make('tasks.partials.task-card', ['task' => $task], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php else: ?>
                                 <div class="text-center py-4">
                                     <i class="bi bi-check-circle" style="font-size: 3rem; color: #ccc;"></i>
                                     <h5 class="mt-2 text-muted" style="font-size: 1rem;">No completed tasks</h5>
                                     <p class="text-muted mb-0" style="font-size: 0.85rem;">Complete some tasks to see them here!</p>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -131,8 +131,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" style="padding: 1.25rem;">
-                <form id="taskForm" action="{{ route('tasks.store') }}" method="POST">
-                    @csrf
+                <form id="taskForm" action="<?php echo e(route('tasks.store')); ?>" method="POST">
+                    <?php echo csrf_field(); ?>
                     <input type="hidden" id="taskId" name="task_id" value="">
                     <input type="hidden" id="formMethod" name="_method" value="POST">
                     <div class="row g-3">
@@ -193,9 +193,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Task reminder checkbox toggle
@@ -217,7 +217,7 @@
             form.action = `/tasks/${taskId}`;
             document.getElementById('formMethod').value = 'PUT';
         } else {
-            form.action = '{{ route("tasks.store") }}';
+            form.action = '<?php echo e(route("tasks.store")); ?>';
             document.getElementById('formMethod').value = 'POST';
         }
         
@@ -365,10 +365,12 @@
     }
 
     // Show success message if exists
-    @if(session('success'))
-        document.getElementById('toastMessage').textContent = '{{ session("success") }}';
+    <?php if(session('success')): ?>
+        document.getElementById('toastMessage').textContent = '<?php echo e(session("success")); ?>';
         const toast = new bootstrap.Toast(document.getElementById('successToast'));
         toast.show();
-    @endif
+    <?php endif; ?>
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\dailydo-laravel\dailydo-laravel\resources\views/tasks/index.blade.php ENDPATH**/ ?>

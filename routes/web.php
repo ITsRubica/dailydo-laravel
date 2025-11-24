@@ -48,9 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     
     // Calendar view
-    Route::get('/calendar', function () {
-        return view('calendar');
-    })->name('calendar');
+    Route::get('/calendar', [DashboardController::class, 'calendar'])->name('calendar');
 });
 
 // Admin routes

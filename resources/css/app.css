@@ -1,3 +1,8 @@
+/* DailyDo Application Styles */
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
 *{
     margin: 0;
     padding: 0;
@@ -11,6 +16,9 @@ body{
     margin: 0;
 }
 
+/* ============================================
+   NAVBAR STYLES (Landing Page)
+   ============================================ */
 .navbar{
     display: flex;
     align-items: center;
@@ -76,7 +84,6 @@ body{
     transform: translateY(-2px);
 }
 
-/* Special styling for Login button */
 .navbar-container .navbar-menu li a[href*="login"]{
     background: white;
     border: 2px solid #896C6C;
@@ -88,7 +95,6 @@ body{
     color: white;
 }
 
-/* Special styling for Register button */
 .navbar-container .navbar-menu li a[href*="register"]{
     background: #896C6C;
     color: white;
@@ -117,14 +123,16 @@ body{
     transition: all 0.2s;
 }
 
-/*LANDING PAGE*/
+/* ============================================
+   LANDING PAGE
+   ============================================ */
 .hero {
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: url("images/To-Do_BG.png") no-repeat center center/cover;
+    background: url("../assets/images/To-Do_BG.png") no-repeat center center/cover;
     color: white;
     position: relative;
     padding: 1rem;
@@ -152,19 +160,9 @@ body{
     margin-top: 1rem;
 }
 
-.footer {
-    background: #333;
-    color: #aaa;
-    text-align: center;
-    padding: 1.5rem 0;
-    margin-top: 3rem;
-}
-
-.footer p {
-    margin: 0;
-}
-
-/* Features Section */
+/* ============================================
+   FEATURES SECTION
+   ============================================ */
 .features {
     padding: 80px 0;
     background: #FAF9EE;
@@ -211,7 +209,9 @@ body{
     margin: 0;
 }
 
-/*LOGIN & REGISTER STYLES*/
+/* ============================================
+   AUTH PAGES (LOGIN & REGISTER)
+   ============================================ */
 .register-section, .login-section {
     min-height: 100vh;
     display: flex;
@@ -288,7 +288,221 @@ body{
     text-decoration: underline;
 }
 
-/*RESPONSIVE*/
+/* ============================================
+   SIDEBAR STYLES (Dashboard)
+   ============================================ */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background: #F1F0E4;
+    border-right: 1px solid #DDDAD0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid #DDDAD0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+}
+
+.sidebar-brand {
+    color: #896C6C;
+    font-weight: 700;
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    color: #896C6C;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.sidebar-toggle:hover {
+    background-color: rgba(137, 108, 108, 0.1);
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 0.5rem 0;
+}
+
+.sidebar-nav .nav-link {
+    color: #333;
+    padding: 0.65rem 1.25rem;
+    border-radius: 0;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.sidebar-nav .nav-link:hover {
+    background-color: rgba(137, 108, 108, 0.1);
+    color: #896C6C;
+}
+
+.sidebar-nav .nav-link.active {
+    background-color: #896C6C;
+    color: white;
+    border-left: 4px solid #6d5454;
+}
+
+.sidebar-nav .nav-link i {
+    font-size: 1rem;
+    width: 18px;
+}
+
+.sidebar-footer {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #DDDAD0;
+}
+
+.logout-link {
+    color: #dc3545 !important;
+    padding: 0.65rem 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.logout-link:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+}
+
+.main-content {
+    margin-left: 250px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s ease;
+}
+
+.main-content main {
+    flex: 1;
+}
+
+/* Top navbar in dashboard */
+.main-content .navbar {
+    height: 60px;
+    background: #F1F0E4;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-bottom: 1px solid #DDDAD0;
+}
+
+/* ============================================
+   DASHBOARD STYLES
+   ============================================ */
+.dashboard-section {
+    padding: 1rem 0;
+}
+
+.dashboard-section h1 {
+    font-size: 1.75rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.dashboard-section .fs-5 {
+    font-size: 1rem !important;
+}
+
+.dashboard-section .card {
+    border-radius: 15px;
+}
+
+.dashboard-section .card-body {
+    padding: 1.25rem !important;
+}
+
+.dashboard-section .form-control-lg {
+    padding: 0.65rem 1rem;
+    font-size: 0.95rem;
+}
+
+.dashboard-section .btn-lg {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.95rem;
+}
+
+.dashboard-section h4 {
+    font-size: 1.15rem;
+}
+
+.dashboard-section h3 {
+    font-size: 1.35rem;
+}
+
+.dashboard-section h5 {
+    font-size: 1rem;
+}
+
+.dashboard-section h6 {
+    font-size: 0.9rem;
+}
+
+.dashboard-section small {
+    font-size: 0.8rem;
+}
+
+.dashboard-section .bi-stars {
+    font-size: 1.5rem;
+}
+
+.dashboard-section .bi-plus-circle-fill {
+    font-size: 1.75rem;
+}
+
+.dashboard-section .bi-graph-up {
+    font-size: 2.5rem;
+}
+
+.dashboard-section .bi-calendar-day,
+.dashboard-section .bi-calendar-week {
+    font-size: 1.25rem;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.footer {
+    background: #333;
+    color: #aaa;
+    text-align: center;
+    padding: 0.75rem 0;
+    margin-top: auto;
+    font-size: 0.85rem;
+    width: 100%;
+}
+
+.footer p {
+    margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+
 /* Tablet and below */
 @media (max-width: 991.98px) {
     .hero-content {
@@ -303,6 +517,47 @@ body{
     
     .register-container, .login-container {
         max-width: 350px;
+    }
+    
+    /* Sidebar responsive */
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+    
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+    }
+    
+    .sidebar-overlay.show {
+        display: block;
+    }
+    
+    /* Dashboard responsive */
+    .dashboard-section .container-fluid {
+        padding: 1rem !important;
+    }
+    
+    .dashboard-section h1 {
+        font-size: clamp(1.5rem, 4vw, 2rem) !important;
+    }
+    
+    .dashboard-section .card-body {
+        padding: 1.5rem !important;
     }
 }
 
@@ -345,6 +600,28 @@ body{
     }
     .navbar-toggle.active .bar:nth-child(3){
         transform: translateY(-8px) rotate(-45deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-section .row.g-4 {
+        gap: 1rem !important;
+    }
+    
+    .dashboard-section .col-md-6,
+    .dashboard-section .col-md-4,
+    .dashboard-section .col-md-2 {
+        margin-bottom: 0.5rem;
+    }
+    
+    .dashboard-section .btn-lg {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+    
+    .dashboard-section .form-control-lg {
+        padding: 0.5rem 0.75rem;
+        font-size: 1rem;
     }
 }
 
@@ -392,181 +669,7 @@ body{
     .features p {
         font-size: 0.9rem;
     }
-}
-
-/* SIDEBAR STYLES */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 280px;
-    background: #F1F0E4;
-    border-right: 1px solid #DDDAD0;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease;
-}
-
-.sidebar-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #DDDAD0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.sidebar-brand {
-    color: #896C6C;
-    font-weight: 700;
-    margin: 0;
-    font-size: 1.5rem;
-}
-
-.sidebar-toggle {
-    background: none;
-    border: none;
-    color: #896C6C;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 6px;
-    transition: background-color 0.2s;
-}
-
-.sidebar-toggle:hover {
-    background-color: rgba(137, 108, 108, 0.1);
-}
-
-.sidebar-nav {
-    flex: 1;
-    padding: 1rem 0;
-}
-
-.sidebar-nav .nav-link {
-    color: #333;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.sidebar-nav .nav-link:hover {
-    background-color: rgba(137, 108, 108, 0.1);
-    color: #896C6C;
-}
-
-.sidebar-nav .nav-link.active {
-    background-color: #896C6C;
-    color: white;
-    border-left: 4px solid #6d5454;
-}
-
-.sidebar-nav .nav-link i {
-    font-size: 1.1rem;
-    width: 20px;
-}
-
-.sidebar-footer {
-    padding: 1rem;
-    border-top: 1px solid #DDDAD0;
-}
-
-.logout-link {
-    color: #dc3545 !important;
-    padding: 0.75rem 0.5rem;
-    border-radius: 6px;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    font-weight: 500;
-    cursor: pointer;
-}
-
-.logout-link:hover {
-    background-color: rgba(220, 53, 69, 0.1);
-}
-
-.main-content {
-    margin-left: 280px;
-    min-height: 100vh;
-    padding-bottom: 60px;
-    transition: margin-left 0.3s ease;
-}
-
-/* RESPONSIVE SIDEBAR */
-@media (max-width: 991.98px) {
-    .sidebar {
-        transform: translateX(-100%);
-    }
     
-    .sidebar.show {
-        transform: translateX(0);
-    }
-    
-    .main-content {
-        margin-left: 0;
-    }
-    
-    .sidebar-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        display: none;
-    }
-    
-    .sidebar-overlay.show {
-        display: block;
-    }
-}
-
-/* Dashboard Responsive Styles */
-@media (max-width: 991.98px) {
-    .dashboard-section .container-fluid {
-        padding: 1rem !important;
-    }
-    
-    .dashboard-section h1 {
-        font-size: clamp(1.5rem, 4vw, 2rem) !important;
-    }
-    
-    .dashboard-section .card-body {
-        padding: 1.5rem !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .dashboard-section .row.g-4 {
-        gap: 1rem !important;
-    }
-    
-    .dashboard-section .col-md-6,
-    .dashboard-section .col-md-4,
-    .dashboard-section .col-md-2 {
-        margin-bottom: 0.5rem;
-    }
-    
-    .dashboard-section .btn-lg {
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-    }
-    
-    .dashboard-section .form-control-lg {
-        padding: 0.5rem 0.75rem;
-        font-size: 1rem;
-    }
-}
-
-@media (max-width: 576px) {
     .dashboard-section .container-fluid {
         padding: 0.5rem !important;
     }

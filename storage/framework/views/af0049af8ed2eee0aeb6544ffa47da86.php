@@ -7,24 +7,24 @@
         <title>dailydo - Home</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('assets/style.css') }}">
+        <link rel="stylesheet" href="<?php echo e(asset('assets/style.css')); ?>">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-        <script defer src="{{ asset('assets/script.js') }}"></script>
+        <script defer src="<?php echo e(asset('assets/script.js')); ?>"></script>
     </head>
     <body>
         <!--NAVBAR-->
         <nav class="navbar">
             <div class="navbar-container">
-              <a href="{{ url('/') }}" class="navbar-logo">dailydo</a>
+              <a href="<?php echo e(url('/')); ?>" class="navbar-logo">dailydo</a>
               <button class="navbar-toggle">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
               </button>
               <ul class="navbar-menu">
-                <li><a href="{{ route('login') }}">Login</a></li>
-                <li><a href="{{ route('register') }}">Register</a></li>
+                <li><a href="<?php echo e(route('login')); ?>">Login</a></li>
+                <li><a href="<?php echo e(route('register')); ?>">Register</a></li>
               </ul>
             </div>
         </nav>
@@ -86,3 +86,4 @@
         </script>
     </body>
 </html>
+<?php /**PATH D:\dailydo-laravel\dailydo-laravel\resources\views/welcome.blade.php ENDPATH**/ ?>

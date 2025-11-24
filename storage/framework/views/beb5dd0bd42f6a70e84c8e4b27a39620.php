@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'Profile - DailyDo')
 
-@push('styles')
+<?php $__env->startSection('title', 'Profile - DailyDo'); ?>
+
+<?php $__env->startPush('styles'); ?>
 <style>
     .profile-picture {
         width: 100px;
@@ -65,9 +65,9 @@
         margin-bottom: 20px;
     }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <!-- PROFILE CONTENT -->
 <section class="dashboard-section mt-3" style="padding-bottom: 3rem;">
     <div class="container-fluid px-4 py-3" style="max-width: 1400px;">
@@ -91,39 +91,40 @@
         </div>
 
         <!-- Success Message -->
-        @if(session('success'))
+        <?php if(session('success')): ?>
             <div class="row mb-2">
                 <div class="col-12">
                     <div class="alert alert-success alert-dismissible fade show py-2" role="alert" style="font-size: 0.85rem;">
-                        <i class="bi bi-check-circle me-1"></i>{{ session('success') }}
+                        <i class="bi bi-check-circle me-1"></i><?php echo e(session('success')); ?>
+
                         <button type="button" class="btn-close" data-bs-dismiss="alert" style="font-size: 0.7rem; padding: 0.5rem;"></button>
                     </div>
                 </div>
             </div>
-        @endif
+        <?php endif; ?>
 
         <div class="row g-3">
             <!-- Profile Information Card -->
             <div class="col-12 col-xl-3 col-lg-4">
                 <div class="profile-card p-3 text-center h-100">
                     <div class="mb-3 d-flex justify-content-center" style="margin-top: 20px;">
-                        @if($user->profile_picture)
-                            <img src="{{ asset('storage/' . $user->profile_picture) }}?v={{ time() }}" alt="Profile Picture" class="profile-picture" id="profilePictureImg">
-                        @else
+                        <?php if($user->profile_picture): ?>
+                            <img src="<?php echo e(asset('storage/' . $user->profile_picture)); ?>?v=<?php echo e(time()); ?>" alt="Profile Picture" class="profile-picture" id="profilePictureImg">
+                        <?php else: ?>
                             <div class="profile-picture-placeholder" id="profilePicturePlaceholder">
                                 <i class="bi bi-person-fill"></i>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
-                    <h5 class="fw-bold mb-1" style="font-size: 1.1rem;">{{ $user->first_name }} {{ $user->last_name }}</h5>
-                    <p class="text-muted mb-1 small" style="font-size: 0.85rem;">{{ $user->email }}</p>
-                    <p class="small text-muted mb-2" style="font-size: 0.8rem;">Member since {{ $user->created_at->format('M Y') }}</p>
+                    <h5 class="fw-bold mb-1" style="font-size: 1.1rem;"><?php echo e($user->first_name); ?> <?php echo e($user->last_name); ?></h5>
+                    <p class="text-muted mb-1 small" style="font-size: 0.85rem;"><?php echo e($user->email); ?></p>
+                    <p class="small text-muted mb-2" style="font-size: 0.8rem;">Member since <?php echo e($user->created_at->format('M Y')); ?></p>
                     
                     <!-- Profile Picture Upload -->
                     <div class="mb-3">
-                        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data" id="profilePictureForm">
-                            @csrf
-                            @method('PATCH')
+                        <form action="<?php echo e(route('profile.update')); ?>" method="POST" enctype="multipart/form-data" id="profilePictureForm">
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('PATCH'); ?>
                             <label class="file-upload-btn btn btn-outline-dark btn-sm" style="font-size: 0.8rem; padding: 4px 12px;">
                                 <i class="bi bi-camera me-1"></i>Update Picture
                                 <input type="file" name="profile_picture" accept="image/*" id="profilePictureInput">
@@ -136,7 +137,7 @@
                         <div class="stats-card py-3 px-3 d-flex flex-row align-items-center justify-content-center gap-2" style="width: 100%; max-width: 240px; min-height: 70px;">
                             <i class="bi bi-fire fs-2"></i>
                             <div class="text-start">
-                                <h3 class="fw-bold mb-0" style="font-size: 1.5rem;">{{ $user->current_streak ?? 0 }}</h3>
+                                <h3 class="fw-bold mb-0" style="font-size: 1.5rem;"><?php echo e($user->current_streak ?? 0); ?></h3>
                                 <span style="font-size: 1rem;">Streak</span>
                                 <p class="text-white mb-0 small" style="font-size: 0.75rem;">without missing a task</p>
                             </div>
@@ -164,34 +165,34 @@
                             <div id="bioDisplay">
                                 <div class="mb-2">
                                     <label class="form-label fw-semibold" style="font-size: 0.85rem;">About Me</label>
-                                    <p class="form-control-plaintext" style="font-size: 0.85rem;">{{ $user->bio ?? 'Tell us about yourself...' }}</p>
+                                    <p class="form-control-plaintext" style="font-size: 0.85rem;"><?php echo e($user->bio ?? 'Tell us about yourself...'); ?></p>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label fw-semibold" style="font-size: 0.85rem;">Interests</label>
                                     <div class="d-flex flex-wrap gap-1">
-                                        @if($user->interests)
-                                            @foreach(explode(',', $user->interests) as $interest)
-                                                <span class="badge bg-primary" style="font-size: 0.75rem;">{{ trim($interest) }}</span>
-                                            @endforeach
-                                        @else
+                                        <?php if($user->interests): ?>
+                                            <?php $__currentLoopData = explode(',', $user->interests); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $interest): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <span class="badge bg-primary" style="font-size: 0.75rem;"><?php echo e(trim($interest)); ?></span>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php else: ?>
                                             <span class="badge bg-secondary" style="font-size: 0.75rem;">Add your interests</span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- Bio Edit Mode -->
                             <div id="bioEdit" style="display: none;">
-                                <form action="{{ route('profile.update') }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
+                                <form action="<?php echo e(route('profile.update')); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('PATCH'); ?>
                                     <div class="mb-2">
                                         <label for="bio" class="form-label" style="font-size: 0.85rem;">About Me</label>
-                                        <textarea class="form-control" id="bio" name="bio" rows="2" placeholder="Tell us about yourself..." style="font-size: 0.85rem;">{{ $user->bio }}</textarea>
+                                        <textarea class="form-control" id="bio" name="bio" rows="2" placeholder="Tell us about yourself..." style="font-size: 0.85rem;"><?php echo e($user->bio); ?></textarea>
                                     </div>
                                     <div class="mb-2">
                                         <label for="interests" class="form-label" style="font-size: 0.85rem;">Interests (comma-separated)</label>
-                                        <input type="text" class="form-control" id="interests" name="interests" placeholder="e.g., Reading, Coding, Travel" value="{{ $user->interests }}" style="font-size: 0.85rem;">
+                                        <input type="text" class="form-control" id="interests" name="interests" placeholder="e.g., Reading, Coding, Travel" value="<?php echo e($user->interests); ?>" style="font-size: 0.85rem;">
                                     </div>
                                     <div class="d-flex gap-2">
                                         <button type="submit" class="btn btn-sm" style="background: #896C6C; border: none; color: white; font-size: 0.8rem; padding: 4px 12px;">
@@ -223,35 +224,35 @@
                                 <div class="row">
                                     <div class="col-12 mb-2">
                                         <label class="form-label fw-semibold" style="font-size: 0.85rem;">First Name</label>
-                                        <p class="form-control-plaintext" style="font-size: 0.85rem;">{{ $user->first_name }}</p>
+                                        <p class="form-control-plaintext" style="font-size: 0.85rem;"><?php echo e($user->first_name); ?></p>
                                     </div>
                                     <div class="col-12 mb-2">
                                         <label class="form-label fw-semibold" style="font-size: 0.85rem;">Last Name</label>
-                                        <p class="form-control-plaintext" style="font-size: 0.85rem;">{{ $user->last_name }}</p>
+                                        <p class="form-control-plaintext" style="font-size: 0.85rem;"><?php echo e($user->last_name); ?></p>
                                     </div>
                                 </div>
                                 <div class="mb-2">
                                     <label class="form-label fw-semibold" style="font-size: 0.85rem;">Email Address</label>
-                                    <p class="form-control-plaintext" style="font-size: 0.85rem;">{{ $user->email }}</p>
+                                    <p class="form-control-plaintext" style="font-size: 0.85rem;"><?php echo e($user->email); ?></p>
                                 </div>
                             </div>
                     
                             <!-- Edit Mode -->
                             <div id="profileEdit" style="display: none;">
-                                <form action="{{ route('profile.update') }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
+                                <form action="<?php echo e(route('profile.update')); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('PATCH'); ?>
                                     <div class="mb-2">
                                         <label for="first_name" class="form-label" style="font-size: 0.85rem;">First Name</label>
-                                        <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $user->first_name }}" required style="font-size: 0.85rem;">
+                                        <input type="text" class="form-control" id="first_name" name="first_name" value="<?php echo e($user->first_name); ?>" required style="font-size: 0.85rem;">
                                     </div>
                                     <div class="mb-2">
                                         <label for="last_name" class="form-label" style="font-size: 0.85rem;">Last Name</label>
-                                        <input type="text" class="form-control" id="last_name" name="last_name" value="{{ $user->last_name }}" required style="font-size: 0.85rem;">
+                                        <input type="text" class="form-control" id="last_name" name="last_name" value="<?php echo e($user->last_name); ?>" required style="font-size: 0.85rem;">
                                     </div>
                                     <div class="mb-2">
                                         <label for="email" class="form-label" style="font-size: 0.85rem;">Email Address</label>
-                                        <input type="email" class="form-control" id="email" name="email" value="{{ $user->email }}" required style="font-size: 0.85rem;">
+                                        <input type="email" class="form-control" id="email" name="email" value="<?php echo e($user->email); ?>" required style="font-size: 0.85rem;">
                                     </div>
                                     <div class="d-flex gap-2">
                                         <button type="submit" class="btn btn-sm" style="background: #896C6C; border: none; color: white; font-size: 0.8rem; padding: 4px 12px;">
@@ -288,9 +289,9 @@
                     
                             <!-- Edit Mode -->
                             <div id="passwordEdit" style="display: none;">
-                                <form action="{{ route('profile.update') }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
+                                <form action="<?php echo e(route('profile.update')); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('PATCH'); ?>
                                     <div class="mb-2">
                                         <label for="current_password" class="form-label" style="font-size: 0.85rem;">Current Password</label>
                                         <input type="password" class="form-control" id="current_password" name="current_password" required style="font-size: 0.85rem;">
@@ -322,9 +323,9 @@
         </div>
     </div>
 </section>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
     function toggleEdit(section) {
         const display = document.getElementById(section + 'Display');
@@ -346,4 +347,6 @@
         }
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\dailydo-laravel\dailydo-laravel\resources\views/profile/show.blade.php ENDPATH**/ ?>
