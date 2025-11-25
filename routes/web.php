@@ -41,6 +41,8 @@ Route::middleware('auth')->group(function () {
     // Tasks
     Route::resource('tasks', TaskController::class);
     Route::patch('/tasks/{task}/toggle', [TaskController::class, 'toggleComplete'])->name('tasks.toggle');
+    Route::post('/tasks/{task}/toggle', [TaskController::class, 'toggleComplete']);
+    Route::get('/api/tasks', [TaskController::class, 'index'])->name('api.tasks');
     
     // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');

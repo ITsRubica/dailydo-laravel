@@ -2,6 +2,122 @@
 
 <?php $__env->startSection('title', 'Dashboard - DailyDo'); ?>
 
+<?php $__env->startPush('styles'); ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    /* Custom Flatpickr theme - Compact Size */
+    .flatpickr-calendar {
+        background: #F1F0E4;
+        border-radius: 12px;
+        border: 2px solid #896C6C;
+        box-shadow: 0 5px 20px rgba(137, 108, 108, 0.3);
+        width: 280px !important;
+        font-size: 13px;
+    }
+    
+    .flatpickr-months {
+        background: #896C6C;
+        border-radius: 10px 10px 0 0;
+        padding: 8px 0;
+        height: 40px;
+    }
+    
+    .flatpickr-month, .flatpickr-current-month {
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        height: 28px;
+    }
+    
+    .flatpickr-prev-month, .flatpickr-next-month {
+        fill: white;
+        padding: 4px;
+        height: 28px;
+        width: 28px;
+    }
+    
+    .flatpickr-prev-month:hover, .flatpickr-next-month:hover {
+        background: rgba(255,255,255,0.2);
+        border-radius: 6px;
+    }
+    
+    .flatpickr-weekdays {
+        background: #A67C7C;
+        height: 32px;
+    }
+    
+    span.flatpickr-weekday {
+        color: white;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 32px;
+    }
+    
+    .flatpickr-days {
+        background: white;
+        width: 280px !important;
+    }
+    
+    .flatpickr-day {
+        color: #333;
+        border-radius: 8px;
+        height: 34px;
+        line-height: 34px;
+        max-width: 36px;
+        font-size: 13px;
+    }
+    
+    .flatpickr-day:hover {
+        background: rgba(137, 108, 108, 0.1);
+        border-color: #896C6C;
+    }
+    
+    .flatpickr-day.today {
+        background: rgba(137, 108, 108, 0.2);
+        border-color: #896C6C;
+        color: #896C6C;
+        font-weight: 700;
+    }
+    
+    .flatpickr-day.selected {
+        background: #896C6C;
+        border-color: #896C6C;
+        color: white;
+        font-weight: 600;
+    }
+    
+    .flatpickr-time {
+        background: white;
+        border-top: 2px solid #DDDAD0;
+        border-radius: 0 0 10px 10px;
+        height: 38px;
+        max-height: 38px;
+    }
+    
+    .flatpickr-time input {
+        color: #896C6C;
+        font-weight: 600;
+        font-size: 14px;
+        height: 32px;
+    }
+    
+    .flatpickr-time .flatpickr-time-separator,
+    .flatpickr-time .flatpickr-am-pm {
+        height: 32px;
+        line-height: 32px;
+        font-size: 13px;
+    }
+    
+    .flatpickr-time .numInputWrapper {
+        height: 32px;
+    }
+    
+    .flatpickr-time .numInputWrapper span {
+        height: 16px;
+    }
+</style>
+<?php $__env->stopPush(); ?>
+
 <?php $__env->startSection('content'); ?>
 <!-- TOAST NOTIFICATION -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
@@ -41,12 +157,13 @@
                         </div>
                         <form id="quickAddForm" action="<?php echo e(route('tasks.store')); ?>" method="POST">
                             <?php echo csrf_field(); ?>
+                            <input type="hidden" name="priority" value="medium">
                             <div class="row g-3">
                                 <div class="col-md-6">
                                     <input type="text" class="form-control form-control-lg" name="title" id="taskTitle" placeholder="What needs to be done?" required style="border-radius: 15px; border: 2px solid #DDDAD0;">
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="datetime-local" class="form-control form-control-lg" name="deadline" id="taskDue" style="border-radius: 15px; border: 2px solid #DDDAD0;">
+                                    <input type="text" class="form-control form-control-lg" name="deadline" id="taskDue" placeholder="Select date & time" style="border-radius: 15px; border: 2px solid #DDDAD0;">
                                 </div>
                                 <div class="col-md-2">
                                     <button type="submit" class="btn btn-lg w-100 fw-bold" style="border-radius: 15px; background: #896C6C; color: white; border: none;">Add</button>
@@ -184,12 +301,18 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: JSON.stringify({
                     status: newStatus
                 })
             });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
             const data = await response.json();
 
@@ -242,20 +365,27 @@
     }
 
     // Quick add form submission
-    document.getElementById('quickAddForm').addEventListener('submit', function(e) {
+    document.getElementById('quickAddForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const formData = new FormData(this);
         
-        fetch(this.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
+        try {
+            const response = await fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-        })
-        .then(response => response.json())
-        .then(data => {
+
+            const data = await response.json();
+            
             if (data.success) {
                 showToast('Task added successfully!');
                 this.reset();
@@ -263,12 +393,27 @@
                     window.location.reload();
                 }, 1000);
             } else {
-                showToast('Error: ' + (data.error || 'Failed to add task'));
+                showToast('Error: ' + (data.message || data.error || 'Failed to add task'));
             }
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('Error:', error);
-            showToast('Error adding task');
+            showToast('Error adding task: ' + error.message);
+        }
+    });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    // Initialize Flatpickr after library is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#taskDue", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            time_24hr: false,
+            minuteIncrement: 15,
+            altInput: true,
+            altFormat: "F j, Y h:i K",
+            minDate: "today"
         });
     });
 </script>

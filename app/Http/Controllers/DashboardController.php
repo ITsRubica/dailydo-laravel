@@ -23,6 +23,27 @@ class DashboardController extends Controller
             ->where('deadline', '<', Carbon::now())
             ->count();
         
+        // Get today's tasks (tasks with deadline today or no deadline but created today)
+        $todayTasks = $user->tasks()
+            ->where(function($query) {
+                $query->whereDate('deadline', Carbon::today())
+                      ->orWhere(function($q) {
+                          $q->whereNull('deadline')
+                            ->whereDate('created_at', Carbon::today());
+                      });
+            })
+            ->orderBy('deadline', 'asc')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        // Get upcoming tasks (tasks with deadline after today)
+        $upcomingTasks = $user->tasks()
+            ->whereNotNull('deadline')
+            ->where('deadline', '>', Carbon::today()->endOfDay())
+            ->orderBy('deadline', 'asc')
+            ->limit(10)
+            ->get();
+        
         // Get recent tasks
         $recentTasks = $user->tasks()
             ->orderBy('created_at', 'desc')
@@ -51,6 +72,8 @@ class DashboardController extends Controller
             'pendingTasks',
             'completedTasks',
             'overdueTasks',
+            'todayTasks',
+            'upcomingTasks',
             'recentTasks',
             'upcomingDeadlines',
             'highPriorityTasks',

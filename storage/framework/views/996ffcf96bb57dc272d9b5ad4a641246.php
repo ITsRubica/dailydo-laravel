@@ -140,25 +140,25 @@
                             <label for="taskTitle" class="form-label fw-semibold d-flex align-items-center" style="color: #333; font-size: 0.9rem;">
                                 <i class="bi bi-pencil-square me-2" style="color: #896C6C;"></i>Task Title *
                             </label>
-                            <input type="text" class="form-control form-control-lg" id="taskTitle" name="title" required placeholder="Enter your task title..." style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 10px 14px;">
+                            <input type="text" class="form-control" id="taskTitle" name="title" required placeholder="Enter your task title..." style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 8px 12px; font-size: 0.9rem;">
                         </div>
                         <div class="col-12">
                             <label for="taskDescription" class="form-label fw-semibold d-flex align-items-center" style="color: #333; font-size: 0.9rem;">
                                 <i class="bi bi-text-paragraph me-2" style="color: #896C6C;"></i>Description
                             </label>
-                            <textarea class="form-control" id="taskDescription" name="description" rows="3" placeholder="Add task details..." style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 10px 14px; resize: vertical;"></textarea>
+                            <textarea class="form-control" id="taskDescription" name="description" rows="3" placeholder="Add task details..." style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 8px 12px; resize: vertical; font-size: 0.9rem;"></textarea>
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="taskDeadline" class="form-label fw-semibold d-flex align-items-center" style="color: #333; font-size: 0.9rem;">
                                 <i class="bi bi-calendar3 me-2" style="color: #896C6C;"></i>Deadline
                             </label>
-                            <input type="datetime-local" class="form-control form-control-lg" id="taskDeadline" name="deadline" style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 10px 14px;">
+                            <input type="datetime-local" class="form-control" id="taskDeadline" name="deadline" style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 8px 12px; font-size: 0.9rem;">
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="taskPriority" class="form-label fw-semibold d-flex align-items-center" style="color: #333; font-size: 0.9rem;">
                                 <i class="bi bi-flag me-2" style="color: #896C6C;"></i>Priority
                             </label>
-                            <select class="form-select form-select-lg" id="taskPriority" name="priority" style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 10px 14px;">
+                            <select class="form-select" id="taskPriority" name="priority" style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 8px 12px; font-size: 0.9rem;">
                                 <option value="low">Low Priority</option>
                                 <option value="medium" selected>Medium Priority</option>
                                 <option value="high">High Priority</option>
@@ -176,7 +176,7 @@
                             <label for="reminderTime" class="form-label fw-semibold d-flex align-items-center" style="color: #333; font-size: 0.9rem;">
                                 <i class="bi bi-clock me-2" style="color: #896C6C;"></i>Reminder Time
                             </label>
-                            <select class="form-select form-select-lg" id="reminderTime" name="reminder_time" style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 10px 14px;">
+                            <select class="form-select" id="reminderTime" name="reminder_time" style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 8px 12px; font-size: 0.9rem;">
                                 <option value="15">15 minutes before</option>
                                 <option value="30">30 minutes before</option>
                                 <option value="60">1 hour before</option>

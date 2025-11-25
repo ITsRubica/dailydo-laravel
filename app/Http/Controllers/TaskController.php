@@ -63,8 +63,8 @@ class TaskController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'priority' => 'required|in:low,medium,high',
-            'deadline' => 'nullable|date|after:now',
+            'priority' => 'nullable|in:low,medium,high',
+            'deadline' => 'nullable|date',
             'reminder' => 'boolean',
             'reminder_time' => 'nullable|integer|min:1|max:1440',
         ]);
@@ -83,10 +83,11 @@ class TaskController extends Controller
         $task = Auth::user()->tasks()->create([
             'title' => $request->title,
             'description' => $request->description,
-            'priority' => $request->priority,
+            'priority' => $request->priority ?? 'medium',
             'deadline' => $request->deadline,
             'reminder' => $request->boolean('reminder'),
             'reminder_time' => $request->reminder_time ?? 15,
+            'status' => 'pending',
         ]);
 
         if ($request->expectsJson()) {
@@ -199,19 +200,33 @@ class TaskController extends Controller
     /**
      * Toggle task completion status.
      */
-    public function toggleComplete(Task $task)
+    public function toggleComplete(Request $request, Task $task)
     {
         $this->authorize('update', $task);
 
-        if ($task->status === 'completed') {
-            $task->markAsPending();
-            $message = 'Task marked as pending';
+        // Check if status is provided in request
+        if ($request->has('status')) {
+            $newStatus = $request->input('status');
+            if ($newStatus === 'completed') {
+                $task->markAsCompleted();
+                $message = 'Task marked as completed';
+            } else {
+                $task->markAsPending();
+                $message = 'Task marked as pending';
+            }
         } else {
-            $task->markAsCompleted();
-            $message = 'Task marked as completed';
+            // Toggle based on current status
+            if ($task->status === 'completed') {
+                $task->markAsPending();
+                $message = 'Task marked as pending';
+            } else {
+                $task->markAsCompleted();
+                $message = 'Task marked as completed';
+            }
         }
 
-        if (request()->expectsJson()) {
+        // Always return JSON for AJAX requests
+        if ($request->expectsJson() || $request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => $message,
