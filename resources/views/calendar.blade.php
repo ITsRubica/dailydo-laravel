@@ -269,18 +269,17 @@
     // Load tasks from API
     async function loadTasks() {
         try {
-            const response = await fetch('/tasks');
-            const html = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            
-            // Extract tasks data from the page (you'll need to add a data attribute or JSON in the tasks page)
-            // For now, we'll make a direct API call
-            const apiResponse = await fetch('/api/tasks');
+            const apiResponse = await fetch('/api/calendar/tasks', {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
             const data = await apiResponse.json();
             
-            if (data.success) {
+            if (data.success && data.tasks) {
                 tasksData = {};
+                
                 data.tasks.forEach(task => {
                     if (task.deadline) {
                         const taskDate = new Date(task.deadline);
@@ -293,6 +292,7 @@
                         }
                     }
                 });
+                console.log('Tasks loaded for calendar:', Object.keys(tasksData).length, 'dates with tasks');
             }
         } catch (error) {
             console.error('Error loading tasks:', error);

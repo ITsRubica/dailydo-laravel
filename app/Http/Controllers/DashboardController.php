@@ -90,4 +90,23 @@ class DashboardController extends Controller
     {
         return view('calendar');
     }
+
+    /**
+     * Get all tasks for calendar display.
+     */
+    public function calendarTasks()
+    {
+        $user = auth()->user();
+        
+        // Get all tasks with deadlines (no pagination)
+        $tasks = $user->tasks()
+            ->whereNotNull('deadline')
+            ->orderBy('deadline', 'asc')
+            ->get();
+        
+        return response()->json([
+            'success' => true,
+            'tasks' => $tasks
+        ]);
+    }
 }

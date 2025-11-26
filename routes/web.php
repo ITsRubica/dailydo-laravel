@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     
     // Calendar view
     Route::get('/calendar', [DashboardController::class, 'calendar'])->name('calendar');
+    Route::get('/api/calendar/tasks', [DashboardController::class, 'calendarTasks'])->name('api.calendar.tasks');
 });
 
 // Admin routes
