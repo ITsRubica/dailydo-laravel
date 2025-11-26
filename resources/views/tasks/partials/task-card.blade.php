@@ -17,8 +17,8 @@
     $deadlineText = $task->deadline ? $task->deadline->format('M d, Y h:i A') : 'No deadline';
 @endphp
 
-<div class="card mb-2 task-card {{ $task->status === 'completed' ? 'completed-task' : '' }}" data-task-id="{{ $task->id }}" data-priority="{{ $task->priority }}" style="border: none; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); background: {{ $task->status === 'completed' ? '#f8f9fa' : 'white' }}; border-left: 3px solid {{ $priorityColor }};">
-    <div class="card-body p-2">
+<div class="card mb-3 task-card {{ $task->status === 'completed' ? 'completed-task' : '' }}" data-task-id="{{ $task->id }}" data-priority="{{ $task->priority }}" style="border: none; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); background: {{ $task->status === 'completed' ? '#f8f9fa' : 'white' }}; border-left: 3px solid {{ $priorityColor }}; transition: all 0.5s ease;">
+    <div class="card-body p-3">
         <div class="d-flex justify-content-between align-items-start">
             <div class="d-flex align-items-start flex-grow-1">
                 <div class="task-checkbox me-2" onclick="toggleTaskStatus('{{ $task->id }}')" title="{{ $task->status === 'completed' ? 'Mark as Pending' : 'Mark as Completed' }}" style="cursor: pointer;">

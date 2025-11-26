@@ -2,6 +2,122 @@
 
 <?php $__env->startSection('title', 'Task List - DailyDo'); ?>
 
+<?php $__env->startPush('styles'); ?>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<style>
+    /* Custom Flatpickr theme - Compact Size */
+    .flatpickr-calendar {
+        background: #F1F0E4;
+        border-radius: 12px;
+        border: 2px solid #896C6C;
+        box-shadow: 0 5px 20px rgba(137, 108, 108, 0.3);
+        width: 280px !important;
+        font-size: 13px;
+    }
+    
+    .flatpickr-months {
+        background: #896C6C;
+        border-radius: 10px 10px 0 0;
+        padding: 8px 0;
+        height: 40px;
+    }
+    
+    .flatpickr-month, .flatpickr-current-month {
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        height: 28px;
+    }
+    
+    .flatpickr-prev-month, .flatpickr-next-month {
+        fill: white;
+        padding: 4px;
+        height: 28px;
+        width: 28px;
+    }
+    
+    .flatpickr-prev-month:hover, .flatpickr-next-month:hover {
+        background: rgba(255,255,255,0.2);
+        border-radius: 6px;
+    }
+    
+    .flatpickr-weekdays {
+        background: #A67C7C;
+        height: 32px;
+    }
+    
+    span.flatpickr-weekday {
+        color: white;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 32px;
+    }
+    
+    .flatpickr-days {
+        background: white;
+        width: 280px !important;
+    }
+    
+    .flatpickr-day {
+        color: #333;
+        border-radius: 8px;
+        height: 34px;
+        line-height: 34px;
+        max-width: 36px;
+        font-size: 13px;
+    }
+    
+    .flatpickr-day:hover {
+        background: rgba(137, 108, 108, 0.1);
+        border-color: #896C6C;
+    }
+    
+    .flatpickr-day.today {
+        background: rgba(137, 108, 108, 0.2);
+        border-color: #896C6C;
+        color: #896C6C;
+        font-weight: 700;
+    }
+    
+    .flatpickr-day.selected {
+        background: #896C6C;
+        border-color: #896C6C;
+        color: white;
+        font-weight: 600;
+    }
+    
+    .flatpickr-time {
+        background: white;
+        border-top: 2px solid #DDDAD0;
+        border-radius: 0 0 10px 10px;
+        height: 38px;
+        max-height: 38px;
+    }
+    
+    .flatpickr-time input {
+        color: #896C6C;
+        font-weight: 600;
+        font-size: 14px;
+        height: 32px;
+    }
+    
+    .flatpickr-time .flatpickr-time-separator,
+    .flatpickr-time .flatpickr-am-pm {
+        height: 32px;
+        line-height: 32px;
+        font-size: 13px;
+    }
+    
+    .flatpickr-time .numInputWrapper {
+        height: 32px;
+    }
+    
+    .flatpickr-time .numInputWrapper span {
+        height: 16px;
+    }
+</style>
+<?php $__env->stopPush(); ?>
+
 <?php $__env->startSection('content'); ?>
 <!-- TOAST NOTIFICATION -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1055;">
@@ -152,7 +268,7 @@
                             <label for="taskDeadline" class="form-label fw-semibold d-flex align-items-center" style="color: #333; font-size: 0.9rem;">
                                 <i class="bi bi-calendar3 me-2" style="color: #896C6C;"></i>Deadline
                             </label>
-                            <input type="datetime-local" class="form-control" id="taskDeadline" name="deadline" style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 8px 12px; font-size: 0.9rem;">
+                            <input type="text" class="form-control" id="taskDeadline" name="deadline" placeholder="Select date & time" style="border: 2px solid #DDDAD0; border-radius: 12px; padding: 8px 12px; font-size: 0.9rem;">
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="taskPriority" class="form-label fw-semibold d-flex align-items-center" style="color: #333; font-size: 0.9rem;">
@@ -288,8 +404,38 @@
         });
     };
 
-    // Toggle task status
+    // Toggle task status with 5-second delay for completed tasks
     window.toggleTaskStatus = function(taskId) {
+        const taskCard = document.querySelector(`.task-card[data-task-id="${taskId}"]`);
+        const isCurrentlyCompleted = taskCard.classList.contains('completed-task');
+        
+        // If marking as completed, show animation first
+        if (!isCurrentlyCompleted) {
+            // Add completion animation
+            taskCard.style.background = 'linear-gradient(135deg, rgba(25, 135, 84, 0.1), rgba(25, 135, 84, 0.05))';
+            taskCard.style.transform = 'scale(0.98)';
+            
+            // Show success indicator
+            const checkIcon = taskCard.querySelector('.task-checkbox i');
+            checkIcon.className = 'bi bi-check';
+            checkIcon.style.color = 'white';
+            taskCard.querySelector('.task-checkbox > div').style.background = '#198754';
+            
+            // Add strikethrough to title
+            const title = taskCard.querySelector('.card-title');
+            title.classList.add('text-decoration-line-through', 'text-muted');
+            
+            // Wait 3 seconds before submitting
+            setTimeout(() => {
+                submitToggle(taskId);
+            }, 3000);
+        } else {
+            // If unchecking, submit immediately
+            submitToggle(taskId);
+        }
+    };
+    
+    function submitToggle(taskId) {
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/tasks/${taskId}/toggle`;
@@ -309,7 +455,7 @@
         form.appendChild(methodInput);
         document.body.appendChild(form);
         form.submit();
-    };
+    }
 
     // Reset form when modal is hidden
     document.getElementById('addTaskModal').addEventListener('hidden.bs.modal', function() {
@@ -370,6 +516,21 @@
         const toast = new bootstrap.Toast(document.getElementById('successToast'));
         toast.show();
     <?php endif; ?>
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    // Initialize Flatpickr for datetime picker
+    document.addEventListener('DOMContentLoaded', function() {
+        flatpickr("#taskDeadline", {
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            time_24hr: false,
+            minuteIncrement: 15,
+            altInput: true,
+            altFormat: "F j, Y h:i K",
+            minDate: "today"
+        });
+    });
 </script>
 <?php $__env->stopPush(); ?>
 
