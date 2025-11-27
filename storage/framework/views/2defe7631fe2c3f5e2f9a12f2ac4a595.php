@@ -46,6 +46,31 @@
         position: relative;
         cursor: pointer;
         transition: background-color 0.2s ease;
+        overflow: hidden;
+    }
+    
+    @media (max-width: 768px) {
+        .calendar-day-header {
+            font-size: 0.7rem;
+            padding: 0.5rem 0.25rem;
+        }
+        
+        .calendar-day {
+            min-height: 70px;
+            padding: 0.3rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .calendar-day-header {
+            font-size: 0.65rem;
+            padding: 0.4rem 0.15rem;
+        }
+        
+        .calendar-day {
+            min-height: 60px;
+            padding: 0.25rem;
+        }
     }
     
     .calendar-day:hover {
@@ -153,10 +178,10 @@
         <div class="calendar-container">
             <!-- Calendar Header with Navigation -->
             <div class="calendar-header">
-                <div class="row align-items-center">
+                <div class="row align-items-center g-2">
                     <div class="col-auto">
                         <button class="nav-button" id="prevMonth">
-                            <i class="bi bi-chevron-left"></i> Previous
+                            <i class="bi bi-chevron-left"></i><span class="d-none d-sm-inline"> Previous</span>
                         </button>
                     </div>
                     <div class="col text-center">
@@ -164,7 +189,7 @@
                     </div>
                     <div class="col-auto">
                         <button class="nav-button" id="nextMonth">
-                            Next <i class="bi bi-chevron-right"></i>
+                            <span class="d-none d-sm-inline">Next </span><i class="bi bi-chevron-right"></i>
                         </button>
                     </div>
                 </div>

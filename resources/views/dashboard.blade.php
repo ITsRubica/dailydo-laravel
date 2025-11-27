@@ -15,6 +15,20 @@
         font-size: 13px;
     }
     
+    @media (max-width: 576px) {
+        .flatpickr-calendar {
+            width: 260px !important;
+            font-size: 12px;
+        }
+        
+        .flatpickr-day {
+            height: 30px !important;
+            line-height: 30px !important;
+            max-width: 32px !important;
+            font-size: 12px !important;
+        }
+    }
+    
     .flatpickr-months {
         background: #896C6C;
         border-radius: 10px 10px 0 0;
@@ -158,22 +172,22 @@
                         <form id="quickAddForm" action="{{ route('tasks.store') }}" method="POST">
                             @csrf
                             <input type="hidden" name="priority" value="medium">
-                            <div class="row g-3">
-                                <div class="col-md-6">
+                            <div class="row g-2">
+                                <div class="col-12 col-md-6">
                                     <input type="text" class="form-control form-control-lg" name="title" id="taskTitle" placeholder="What needs to be done?" required style="border-radius: 15px; border: 2px solid #DDDAD0;">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-8 col-md-4">
                                     <input type="text" class="form-control form-control-lg" name="deadline" id="taskDue" placeholder="Select date & time" style="border-radius: 15px; border: 2px solid #DDDAD0;">
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-4 col-md-2">
                                     <button type="submit" class="btn btn-lg w-100 fw-bold" style="border-radius: 15px; background: #896C6C; color: white; border: none;">Add</button>
                                 </div>
                             </div>
-                            <div class="row mt-3">
+                            <div class="row mt-2">
                                 <div class="col-12">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" name="reminder" id="setReminder" value="1" style="border-radius: 6px;">
-                                        <label class="form-check-label fw-medium" for="setReminder" style="color: #333;">
+                                        <label class="form-check-label fw-medium" for="setReminder" style="color: #333; font-size: 0.9rem;">
                                             <i class="bi bi-bell me-1" style="color: #896C6C;"></i> Set reminder
                                         </label>
                                     </div>

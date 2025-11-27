@@ -125,6 +125,11 @@ class TaskController extends Controller
     {
         $this->authorize('update', $task);
 
+        // Return JSON for AJAX requests
+        if (request()->expectsJson() || request()->ajax() || request()->wantsJson()) {
+            return response()->json($task);
+        }
+
         return view('tasks.edit', compact('task'));
     }
 

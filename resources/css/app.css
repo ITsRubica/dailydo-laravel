@@ -14,6 +14,11 @@ body{
     min-height: 100vh;
     background-color: #fff;
     margin: 0;
+    overflow-x: hidden;
+}
+
+html {
+    overflow-x: hidden;
 }
 
 /* ============================================
@@ -500,6 +505,32 @@ body{
 }
 
 /* ============================================
+   TOUCH IMPROVEMENTS FOR MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+    /* Increase touch target sizes */
+    .btn, button {
+        min-height: 36px;
+    }
+    
+    .form-check-input {
+        min-width: 20px;
+        min-height: 20px;
+    }
+    
+    /* Better spacing for touch */
+    .nav-link {
+        padding: 0.75rem 1rem !important;
+    }
+    
+    /* Prevent text selection on buttons */
+    .btn, button, .nav-link {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+    }
+}
+
+/* ============================================
    RESPONSIVE STYLES
    ============================================ */
 
@@ -522,6 +553,7 @@ body{
     /* Sidebar responsive */
     .sidebar {
         transform: translateX(-100%);
+        width: 250px;
     }
     
     .sidebar.show {
@@ -548,16 +580,61 @@ body{
     }
     
     /* Dashboard responsive */
-    .dashboard-section .container-fluid {
-        padding: 1rem !important;
+    .dashboard-section .container-fluid,
+    .task-section .container-fluid,
+    .calendar-section .container-fluid {
+        padding: 0.75rem !important;
     }
     
-    .dashboard-section h1 {
-        font-size: clamp(1.5rem, 4vw, 2rem) !important;
+    .dashboard-section h1,
+    .task-section h1,
+    .calendar-section h1 {
+        font-size: clamp(1.3rem, 4vw, 1.75rem) !important;
     }
     
     .dashboard-section .card-body {
-        padding: 1.5rem !important;
+        padding: 1rem !important;
+    }
+    
+    /* Task list responsive */
+    .task-section .card-body {
+        padding: 0.75rem !important;
+    }
+    
+    /* Calendar responsive */
+    .calendar-container {
+        padding: 1rem !important;
+    }
+    
+    .calendar-day {
+        min-height: 80px !important;
+        padding: 0.3rem !important;
+    }
+    
+    .calendar-day-number {
+        font-size: 0.75rem !important;
+    }
+    
+    .task-indicator {
+        font-size: 0.65rem !important;
+        padding: 0.1rem 0.2rem !important;
+    }
+    
+    /* Profile responsive */
+    .profile-picture,
+    .profile-picture-placeholder {
+        width: 80px !important;
+        height: 80px !important;
+        font-size: 1.5rem !important;
+    }
+    
+    .stats-card {
+        padding: 10px 12px !important;
+        min-height: 60px !important;
+    }
+    
+    .form-section {
+        padding: 12px !important;
     }
 }
 
@@ -604,8 +681,9 @@ body{
 }
 
 @media (max-width: 768px) {
-    .dashboard-section .row.g-4 {
-        gap: 1rem !important;
+    /* Dashboard */
+    .dashboard-section .row.g-3 {
+        gap: 0.75rem !important;
     }
     
     .dashboard-section .col-md-6,
@@ -615,13 +693,68 @@ body{
     }
     
     .dashboard-section .btn-lg {
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
     }
     
     .dashboard-section .form-control-lg {
         padding: 0.5rem 0.75rem;
-        font-size: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Task list */
+    .task-section .btn {
+        font-size: 0.85rem !important;
+        padding: 6px 12px !important;
+    }
+    
+    .task-section .nav-pills .nav-link {
+        font-size: 0.8rem !important;
+        padding: 6px 10px !important;
+    }
+    
+    .task-section .badge {
+        font-size: 0.7rem !important;
+    }
+    
+    /* Calendar */
+    .calendar-header {
+        padding: 0.75rem !important;
+    }
+    
+    .calendar-day-header {
+        font-size: 0.75rem !important;
+        padding: 0.5rem 0.25rem !important;
+    }
+    
+    .calendar-day {
+        min-height: 70px !important;
+    }
+    
+    .nav-button {
+        font-size: 0.8rem !important;
+        padding: 0.35rem 0.6rem !important;
+    }
+    
+    .month-year-display {
+        font-size: 1.1rem !important;
+    }
+    
+    /* Modal adjustments */
+    .modal-dialog {
+        margin: 0.5rem !important;
+    }
+    
+    .modal-body {
+        padding: 1rem !important;
+    }
+    
+    .modal-header {
+        padding: 0.75rem 1rem !important;
+    }
+    
+    .modal-footer {
+        padding: 0.75rem 1rem !important;
     }
 }
 
@@ -631,11 +764,11 @@ body{
     }
 
     .navbar-logo{
-        font-size: 1.7rem;
+        font-size: 1.5rem;
     }
 
     .navbar-container .navbar-menu li a{
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         padding: 3px 15px;
     }
     
@@ -650,12 +783,13 @@ body{
     }
     
     .register-container, .login-container {
-        max-width: 300px;
+        max-width: 100%;
         padding: 1.5rem 1rem;
+        margin: 0 0.5rem;
     }
     
     .register-container h2, .login-container h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
     
     .features {
@@ -663,30 +797,293 @@ body{
     }
     
     .features h3 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
     
     .features p {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
     
+    /* Dashboard mobile */
     .dashboard-section .container-fluid {
         padding: 0.5rem !important;
     }
     
     .dashboard-section .card {
-        border-radius: 15px !important;
+        border-radius: 12px !important;
     }
     
     .dashboard-section .card-body {
-        padding: 1rem !important;
+        padding: 0.75rem !important;
+    }
+    
+    .dashboard-section h1 {
+        font-size: 1.25rem !important;
     }
     
     .dashboard-section h4 {
-        font-size: 1.2rem;
+        font-size: 1rem !important;
+    }
+    
+    .dashboard-section h5 {
+        font-size: 0.9rem !important;
+    }
+    
+    .dashboard-section h6 {
+        font-size: 0.85rem !important;
     }
     
     .dashboard-section .row.mt-3 {
-        margin-top: 1rem !important;
+        margin-top: 0.75rem !important;
+    }
+    
+    .dashboard-section .bi-stars {
+        font-size: 1.25rem !important;
+    }
+    
+    .dashboard-section .bi-plus-circle-fill {
+        font-size: 1.5rem !important;
+    }
+    
+    .dashboard-section .bi-graph-up {
+        font-size: 2rem !important;
+    }
+    
+    /* Task list mobile */
+    .task-section .container-fluid {
+        padding: 0.5rem !important;
+    }
+    
+    .task-section h1 {
+        font-size: 1.25rem !important;
+    }
+    
+    .task-section .btn {
+        font-size: 0.8rem !important;
+        padding: 5px 10px !important;
+    }
+    
+    .task-section .card-body {
+        padding: 0.5rem !important;
+    }
+    
+    .task-section .nav-pills .nav-link {
+        font-size: 0.75rem !important;
+        padding: 5px 8px !important;
+    }
+    
+    .task-section .form-control,
+    .task-section .form-select {
+        font-size: 0.85rem !important;
+        padding: 5px 8px !important;
+    }
+    
+    .task-section .input-group-text {
+        padding: 5px 8px !important;
+    }
+    
+    /* Calendar mobile */
+    .calendar-section .container-fluid {
+        padding: 0.5rem !important;
+    }
+    
+    .calendar-container {
+        padding: 0.75rem !important;
+    }
+    
+    .calendar-header {
+        padding: 0.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .calendar-day-header {
+        font-size: 0.65rem !important;
+        padding: 0.4rem 0.15rem !important;
+    }
+    
+    .calendar-day {
+        min-height: 60px !important;
+        padding: 0.25rem !important;
+    }
+    
+    .calendar-day-number {
+        font-size: 0.7rem !important;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    .task-indicator {
+        font-size: 0.6rem !important;
+        padding: 0.1rem 0.15rem !important;
+        margin-bottom: 0.1rem !important;
+    }
+    
+    .nav-button {
+        font-size: 0.75rem !important;
+        padding: 0.3rem 0.5rem !important;
+    }
+    
+    .month-year-display {
+        font-size: 1rem !important;
+    }
+    
+    /* Profile mobile */
+    .profile-picture,
+    .profile-picture-placeholder {
+        width: 70px !important;
+        height: 70px !important;
+        font-size: 1.25rem !important;
+    }
+    
+    .stats-card {
+        padding: 8px 10px !important;
+        min-height: 55px !important;
+    }
+    
+    .stats-card h3 {
+        font-size: 1.25rem !important;
+    }
+    
+    .stats-card span {
+        font-size: 0.9rem !important;
+    }
+    
+    .stats-card .bi-fire {
+        font-size: 1.5rem !important;
+    }
+    
+    .form-section {
+        padding: 10px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .form-section h5 {
+        font-size: 0.9rem !important;
+    }
+    
+    .form-section .btn {
+        font-size: 0.75rem !important;
+        padding: 3px 8px !important;
+    }
+    
+    .form-section label,
+    .form-section .form-label {
+        font-size: 0.8rem !important;
+    }
+    
+    .form-section input,
+    .form-section textarea,
+    .form-section select {
+        font-size: 0.8rem !important;
+        padding: 6px 8px !important;
+    }
+    
+    .admin-header {
+        padding: 12px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .admin-header h2 {
+        font-size: 1.25rem !important;
+    }
+    
+    .admin-header p {
+        font-size: 0.8rem !important;
+    }
+    
+    /* Modal mobile */
+    .modal-dialog {
+        margin: 0.25rem !important;
+    }
+    
+    .modal-content {
+        border-radius: 12px !important;
+    }
+    
+    .modal-header {
+        padding: 0.5rem 0.75rem !important;
+    }
+    
+    .modal-header h5 {
+        font-size: 1rem !important;
+    }
+    
+    .modal-body {
+        padding: 0.75rem !important;
+    }
+    
+    .modal-body label {
+        font-size: 0.8rem !important;
+    }
+    
+    .modal-body input,
+    .modal-body textarea,
+    .modal-body select {
+        font-size: 0.85rem !important;
+        padding: 6px 10px !important;
+    }
+    
+    .modal-footer {
+        padding: 0.5rem 0.75rem !important;
+    }
+    
+    .modal-footer .btn {
+        font-size: 0.85rem !important;
+        padding: 5px 10px !important;
+    }
+    
+    /* Sidebar mobile */
+    .sidebar {
+        width: 220px !important;
+    }
+    
+    .sidebar-header {
+        padding: 0.75rem 1rem !important;
+        height: 55px !important;
+    }
+    
+    .sidebar-brand {
+        font-size: 1.15rem !important;
+    }
+    
+    .sidebar-nav .nav-link {
+        padding: 0.6rem 1rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    .sidebar-nav .nav-link i {
+        font-size: 1rem !important;
+    }
+    
+    .sidebar-footer {
+        padding: 0.6rem 0.75rem !important;
+    }
+    
+    .logout-link {
+        padding: 0.6rem 0.5rem !important;
+        font-size: 0.9rem !important;
+    }
+    
+    /* Top navbar mobile */
+    .main-content .navbar {
+        height: 55px !important;
+        padding: 0.4rem 0.75rem !important;
+    }
+    
+    .navbar-brand {
+        font-size: 1.15rem !important;
+    }
+    
+    .navbar-toggler {
+        padding: 0.2rem 0.4rem !important;
+    }
+    
+    .navbar-toggler i {
+        font-size: 1.25rem !important;
+    }
+    
+    /* Footer mobile */
+    .footer {
+        padding: 0.6rem 0 !important;
+        font-size: 0.75rem !important;
     }
 }

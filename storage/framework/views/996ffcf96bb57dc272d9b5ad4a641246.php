@@ -15,6 +15,20 @@
         font-size: 13px;
     }
     
+    @media (max-width: 576px) {
+        .flatpickr-calendar {
+            width: 260px !important;
+            font-size: 12px;
+        }
+        
+        .flatpickr-day {
+            height: 30px !important;
+            line-height: 30px !important;
+            max-width: 32px !important;
+            font-size: 12px !important;
+        }
+    }
+    
     .flatpickr-months {
         background: #896C6C;
         border-radius: 10px 10px 0 0;
@@ -136,14 +150,16 @@
     <div class="container-fluid px-4 py-3">
         <!-- Header Section -->
         <div class="row mb-3">
-            <div class="col-12 d-flex justify-content-between align-items-center">
-                <div>
-                    <h1 class="fw-bold mb-1" style="font-size: 1.5rem;"><i class="bi bi-list-task me-2" style="color: #896C6C;"></i>Task Management</h1>
-                    <p class="text-muted mb-0" style="font-size: 0.95rem;">Organize and track your tasks efficiently</p>
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                    <div>
+                        <h1 class="fw-bold mb-1" style="font-size: 1.5rem;"><i class="bi bi-list-task me-2" style="color: #896C6C;"></i>Task Management</h1>
+                        <p class="text-muted mb-0" style="font-size: 0.95rem;">Organize and track your tasks efficiently</p>
+                    </div>
+                    <button class="btn fw-bold" data-bs-toggle="modal" data-bs-target="#addTaskModal" style="background: #896C6C; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 0.9rem; white-space: nowrap;">
+                        <i class="bi bi-plus-circle me-1"></i><span class="d-none d-sm-inline">Add New Task</span><span class="d-inline d-sm-none">Add</span>
+                    </button>
                 </div>
-                <button class="btn fw-bold" data-bs-toggle="modal" data-bs-target="#addTaskModal" style="background: #896C6C; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 0.9rem;">
-                    <i class="bi bi-plus-circle me-1"></i>Add New Task
-                </button>
             </div>
         </div>
 
@@ -342,19 +358,38 @@
 
     // Edit task function
     window.editTask = function(taskId) {
-        fetch(`/tasks/${taskId}/edit`)
-            .then(response => response.json())
+        fetch(`/tasks/${taskId}/edit`, {
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch task');
+                }
+                return response.json();
+            })
             .then(task => {
+                // Set form values
                 document.getElementById('taskId').value = task.id;
                 document.getElementById('taskTitle').value = task.title;
                 document.getElementById('taskDescription').value = task.description || '';
                 
+                // Set deadline using flatpickr if available
+                const deadlineInput = document.getElementById('taskDeadline');
                 if (task.deadline) {
-                    const date = new Date(task.deadline);
-                    const formattedDate = date.toISOString().slice(0, 16);
-                    document.getElementById('taskDeadline').value = formattedDate;
+                    // Set the value directly for flatpickr
+                    deadlineInput.value = task.deadline;
+                    // If flatpickr instance exists, update it
+                    if (deadlineInput._flatpickr) {
+                        deadlineInput._flatpickr.setDate(task.deadline);
+                    }
                 } else {
-                    document.getElementById('taskDeadline').value = '';
+                    deadlineInput.value = '';
+                    if (deadlineInput._flatpickr) {
+                        deadlineInput._flatpickr.clear();
+                    }
                 }
                 
                 document.getElementById('taskPriority').value = task.priority;
@@ -366,6 +401,14 @@
                 
                 document.getElementById('addTaskModalLabel').textContent = 'Edit Task';
                 new bootstrap.Modal(document.getElementById('addTaskModal')).show();
+            })
+            .catch(error => {
+                console.error('Error loading task:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to load task details. Please try again.'
+                });
             });
     };
 
