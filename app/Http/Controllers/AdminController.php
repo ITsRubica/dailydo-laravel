@@ -10,46 +10,31 @@ use Carbon\Carbon;
 class AdminController extends Controller
 {
     /**
-     * Display the admin dashboard.
+     * Display the admin dashboard (User Management).
      */
     public function index()
     {
-        // Get system statistics
+        // Get all users
+        $users = User::orderBy('created_at', 'desc')->get();
+        
+        // Get statistics
         $totalUsers = User::count();
-        $totalTasks = Task::count();
-        $completedTasks = Task::where('completed', true)->count();
-        $pendingTasks = Task::where('completed', false)->count();
-        $overdueTasks = Task::where('completed', false)
-            ->where('deadline', '<', Carbon::now())
-            ->count();
         
-        // Get recent users
-        $recentUsers = User::orderBy('created_at', 'desc')->limit(5)->get();
-        
-        // Get recent tasks
-        $recentTasks = Task::with('user')
-            ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get();
-        
-        // Get user activity (users who created tasks in the last 7 days)
+        // Get active users (users who created tasks in the last 7 days)
         $activeUsers = User::whereHas('tasks', function ($query) {
             $query->where('created_at', '>=', Carbon::now()->subDays(7));
         })->count();
         
-        // Calculate completion rate
-        $completionRate = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100, 1) : 0;
+        // Get new users this month
+        $newUsers = User::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->count();
         
         return view('admin.dashboard', compact(
+            'users',
             'totalUsers',
-            'totalTasks',
-            'completedTasks',
-            'pendingTasks',
-            'overdueTasks',
-            'recentUsers',
-            'recentTasks',
             'activeUsers',
-            'completionRate'
+            'newUsers'
         ));
     }
 
@@ -125,13 +110,38 @@ class AdminController extends Controller
     }
 
     /**
+     * Update a user.
+     */
+    public function updateUser(Request $request, User $user)
+    {
+        $request->validate([
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+        ]);
+        
+        $user->update([
+            'username' => $request->username,
+            'email' => $request->email,
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'User updated successfully.',
+            'user' => $user
+        ]);
+    }
+    
+    /**
      * Delete a user.
      */
     public function deleteUser(User $user)
     {
         // Prevent deleting admin users
         if ($user->isAdmin()) {
-            return back()->withErrors(['error' => 'Cannot delete admin users.']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot delete admin users.'
+            ], 403);
         }
         
         // Delete user's tasks first
@@ -140,6 +150,9 @@ class AdminController extends Controller
         // Delete the user
         $user->delete();
         
-        return back()->with('success', 'User deleted successfully.');
+        return response()->json([
+            'success' => true,
+            'message' => 'User deleted successfully.'
+        ]);
     }
 }

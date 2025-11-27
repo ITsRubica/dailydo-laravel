@@ -14,6 +14,11 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         
+        // Redirect admin users to admin panel
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+        
         // Get task statistics
         $totalTasks = $user->tasks()->count();
         $pendingTasks = $user->tasks()->pending()->count();

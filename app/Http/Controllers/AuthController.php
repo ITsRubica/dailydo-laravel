@@ -42,6 +42,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+            
+            // Redirect admin users to admin panel, regular users to dashboard
+            if (Auth::user()->isAdmin()) {
+                return redirect()->intended('/admin');
+            }
+            
             return redirect()->intended('/dashboard');
         }
 
@@ -90,6 +96,11 @@ class AuthController extends Controller
 
         Auth::login($user);
 
+        // Redirect based on user role
+        if ($user->isAdmin()) {
+            return redirect('/admin')->with('success', 'Registration successful! Welcome to DailyDo.');
+        }
+        
         return redirect('/dashboard')->with('success', 'Registration successful! Welcome to DailyDo.');
     }
 
