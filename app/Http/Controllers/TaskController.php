@@ -35,7 +35,7 @@ class TaskController extends Controller
             }
         }
 
-        $tasks = $query->paginate(10);
+        $tasks = $query->get();
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -98,6 +98,7 @@ class TaskController extends Controller
             ], 201);
         }
 
+        \Log::info('Task created', ['task_id' => $task->id, 'user_id' => Auth::id()]);
         return redirect()->route('tasks.index')->with('success', 'Task created successfully!');
     }
 
@@ -260,6 +261,45 @@ class TaskController extends Controller
         return response()->json([
             'success' => true,
             'statistics' => $stats
+        ]);
+    }
+
+    /**
+     * Check for tasks with upcoming reminders.
+     */
+    public function checkReminders()
+    {
+        $user = Auth::user();
+        $now = now();
+        
+        // Get tasks with reminders that are due soon
+        $tasks = $user->tasks()
+            ->where('status', 'pending')
+            ->where('reminder', true)
+            ->whereNotNull('deadline')
+            ->where('deadline', '>', $now)
+            ->get()
+            ->filter(function ($task) use ($now) {
+                // Calculate reminder time
+                $reminderTime = $task->deadline->copy()->subMinutes($task->reminder_time);
+                // Check if we're within the reminder window (reminder time to deadline)
+                return $now->greaterThanOrEqualTo($reminderTime) && $now->lessThan($task->deadline);
+            })
+            ->map(function ($task) {
+                return [
+                    'id' => $task->id,
+                    'title' => $task->title,
+                    'description' => $task->description,
+                    'deadline' => $task->deadline->format('M d, Y h:i A'),
+                    'priority' => $task->priority,
+                    'time_until' => $task->deadline->diffForHumans(),
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'success' => true,
+            'reminders' => $tasks
         ]);
     }
 }

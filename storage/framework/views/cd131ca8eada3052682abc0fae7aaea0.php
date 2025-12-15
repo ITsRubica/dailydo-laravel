@@ -11,20 +11,20 @@
         border-radius: 12px;
         border: 2px solid #896C6C;
         box-shadow: 0 5px 20px rgba(137, 108, 108, 0.3);
-        width: 280px !important;
+        width: 310px !important;
         font-size: 13px;
     }
     
     @media (max-width: 576px) {
         .flatpickr-calendar {
-            width: 260px !important;
+            width: 290px !important;
             font-size: 12px;
         }
         
         .flatpickr-day {
             height: 30px !important;
             line-height: 30px !important;
-            max-width: 32px !important;
+            max-width: 36px !important;
             font-size: 12px !important;
         }
     }
@@ -69,7 +69,7 @@
     
     .flatpickr-days {
         background: white;
-        width: 280px !important;
+        width: 310px !important;
     }
     
     .flatpickr-day {

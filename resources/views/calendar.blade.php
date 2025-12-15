@@ -42,34 +42,85 @@
     .calendar-day {
         min-height: 100px;
         border: 1px solid #e9ecef;
-        padding: 0.4rem;
+        padding: 0.5rem;
         position: relative;
         cursor: pointer;
         transition: background-color 0.2s ease;
         overflow: hidden;
     }
     
+    /* Tablet */
     @media (max-width: 768px) {
+        .calendar-container {
+            padding: 1rem;
+        }
+        
         .calendar-day-header {
-            font-size: 0.7rem;
-            padding: 0.5rem 0.25rem;
+            font-size: 0.75rem;
+            padding: 0.6rem 0.3rem;
         }
         
         .calendar-day {
-            min-height: 70px;
-            padding: 0.3rem;
+            min-height: 80px;
+            padding: 0.4rem;
+        }
+        
+        .calendar-day-number {
+            font-size: 0.8rem;
         }
     }
     
+    /* Mobile */
     @media (max-width: 576px) {
+        .calendar-container {
+            padding: 0.75rem;
+            border-radius: 10px;
+        }
+        
+        .calendar-header {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .calendar-day-header {
+            font-size: 0.7rem;
+            padding: 0.5rem 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .calendar-day {
+            min-height: 65px;
+            padding: 0.3rem;
+        }
+        
+        .calendar-day-number {
+            font-size: 0.75rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .task-indicator {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.25rem;
+            margin-bottom: 0.1rem;
+        }
+    }
+    
+    /* Extra small mobile */
+    @media (max-width: 400px) {
         .calendar-day-header {
             font-size: 0.65rem;
             padding: 0.4rem 0.15rem;
         }
         
         .calendar-day {
-            min-height: 60px;
+            min-height: 55px;
             padding: 0.25rem;
+        }
+        
+        .calendar-day-number {
+            font-size: 0.7rem;
         }
     }
     
@@ -146,6 +197,18 @@
         color: #896C6C;
         font-weight: 700;
         font-size: 1.3rem;
+    }
+    
+    /* Mobile responsiveness for header */
+    @media (max-width: 576px) {
+        .month-year-display {
+            font-size: 1.1rem;
+        }
+        
+        .nav-button {
+            padding: 0.35rem 0.6rem;
+            font-size: 0.8rem;
+        }
     }
 </style>
 @endpush

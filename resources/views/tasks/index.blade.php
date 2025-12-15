@@ -11,20 +11,20 @@
         border-radius: 12px;
         border: 2px solid #896C6C;
         box-shadow: 0 5px 20px rgba(137, 108, 108, 0.3);
-        width: 280px !important;
+        width: 310px !important;
         font-size: 13px;
     }
     
     @media (max-width: 576px) {
         .flatpickr-calendar {
-            width: 260px !important;
+            width: 290px !important;
             font-size: 12px;
         }
         
         .flatpickr-day {
             height: 30px !important;
             line-height: 30px !important;
-            max-width: 32px !important;
+            max-width: 36px !important;
             font-size: 12px !important;
         }
     }
@@ -69,7 +69,7 @@
     
     .flatpickr-days {
         background: white;
-        width: 280px !important;
+        width: 310px !important;
     }
     
     .flatpickr-day {
@@ -156,7 +156,7 @@
                         <h1 class="fw-bold mb-1" style="font-size: 1.5rem;"><i class="bi bi-list-task me-2" style="color: #896C6C;"></i>Task Management</h1>
                         <p class="text-muted mb-0" style="font-size: 0.95rem;">Organize and track your tasks efficiently</p>
                     </div>
-                    <button class="btn fw-bold" data-bs-toggle="modal" data-bs-target="#addTaskModal" style="background: #896C6C; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 0.9rem; white-space: nowrap;">
+                    <button class="btn fw-bold" id="addTaskBtn" data-bs-toggle="modal" data-bs-target="#addTaskModal" style="background: #896C6C; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 0.9rem; white-space: nowrap;">
                         <i class="bi bi-plus-circle me-1"></i><span class="d-none d-sm-inline">Add New Task</span><span class="d-inline d-sm-none">Add</span>
                     </button>
                 </div>
@@ -265,7 +265,7 @@
             <div class="modal-body" style="padding: 1.25rem;">
                 <form id="taskForm" action="{{ route('tasks.store') }}" method="POST">
                     @csrf
-                    <input type="hidden" id="taskId" name="task_id" value="">
+                    <input type="hidden" id="taskId" value="">
                     <input type="hidden" id="formMethod" name="_method" value="POST">
                     <div class="row g-3">
                         <div class="col-12">
@@ -330,32 +330,6 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    // Task reminder checkbox toggle
-    document.getElementById('taskReminder').addEventListener('change', function() {
-        const reminderSettings = document.getElementById('reminderSettings');
-        if (this.checked) {
-            reminderSettings.style.display = 'block';
-        } else {
-            reminderSettings.style.display = 'none';
-        }
-    });
-
-    // Save task
-    document.getElementById('saveTaskBtn').addEventListener('click', function() {
-        const form = document.getElementById('taskForm');
-        const taskId = document.getElementById('taskId').value;
-        
-        if (taskId) {
-            form.action = `/tasks/${taskId}`;
-            document.getElementById('formMethod').value = 'PUT';
-        } else {
-            form.action = '{{ route("tasks.store") }}';
-            document.getElementById('formMethod').value = 'POST';
-        }
-        
-        form.submit();
-    });
-
     // Edit task function
     window.editTask = function(taskId) {
         fetch(`/tasks/${taskId}/edit`, {
@@ -500,43 +474,7 @@
         form.submit();
     }
 
-    // Reset form when modal is hidden
-    document.getElementById('addTaskModal').addEventListener('hidden.bs.modal', function() {
-        document.getElementById('taskForm').reset();
-        document.getElementById('taskId').value = '';
-        document.getElementById('reminderSettings').style.display = 'none';
-        document.getElementById('addTaskModalLabel').textContent = 'Add New Task';
-    });
-
-    // Tab switching event listeners
-    document.getElementById('active-tab').addEventListener('click', function() {
-        this.style.background = '#896C6C';
-        this.style.color = 'white';
-        document.getElementById('activeTaskCount').style.background = 'rgba(255,255,255,0.3)';
-        document.getElementById('activeTaskCount').style.color = 'white';
-        
-        document.getElementById('completed-tab').style.background = 'transparent';
-        document.getElementById('completed-tab').style.color = '#6c757d';
-        document.getElementById('completedTaskCount').style.background = '#6c757d';
-        document.getElementById('completedTaskCount').style.color = 'white';
-    });
-
-    document.getElementById('completed-tab').addEventListener('click', function() {
-        this.style.background = '#6c757d';
-        this.style.color = 'white';
-        document.getElementById('completedTaskCount').style.background = 'rgba(255,255,255,0.3)';
-        document.getElementById('completedTaskCount').style.color = 'white';
-        
-        document.getElementById('active-tab').style.background = 'transparent';
-        document.getElementById('active-tab').style.color = '#896C6C';
-        document.getElementById('activeTaskCount').style.background = '#896C6C';
-        document.getElementById('activeTaskCount').style.color = 'white';
-    });
-
-    // Search and filter functionality
-    document.getElementById('searchTasks').addEventListener('input', filterTasks);
-    document.getElementById('filterPriority').addEventListener('change', filterTasks);
-
+    // Filter tasks function (needs to be global for event listeners)
     function filterTasks() {
         const searchTerm = document.getElementById('searchTasks').value.toLowerCase();
         const priorityFilter = document.getElementById('filterPriority').value;
@@ -553,17 +491,146 @@
         });
     }
 
-    // Show success message if exists
-    @if(session('success'))
-        document.getElementById('toastMessage').textContent = '{{ session("success") }}';
-        const toast = new bootstrap.Toast(document.getElementById('successToast'));
-        toast.show();
-    @endif
-</script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-    // Initialize Flatpickr for datetime picker
+    // Initialize event listeners when DOM is ready
     document.addEventListener('DOMContentLoaded', function() {
+        // Task reminder checkbox toggle
+        const taskReminderCheckbox = document.getElementById('taskReminder');
+        if (taskReminderCheckbox) {
+            taskReminderCheckbox.addEventListener('change', function() {
+                const reminderSettings = document.getElementById('reminderSettings');
+                if (this.checked) {
+                    reminderSettings.style.display = 'block';
+                } else {
+                    reminderSettings.style.display = 'none';
+                }
+            });
+        }
+
+        // Save task button
+        const saveTaskBtn = document.getElementById('saveTaskBtn');
+        if (saveTaskBtn) {
+            saveTaskBtn.addEventListener('click', async function(e) {
+                e.preventDefault();
+                const form = document.getElementById('taskForm');
+                const taskId = document.getElementById('taskId').value;
+                
+                // Validate required fields
+                const title = document.getElementById('taskTitle').value.trim();
+                if (!title) {
+                    alert('Please enter a task title');
+                    return;
+                }
+                
+                // Disable button to prevent double submission
+                saveTaskBtn.disabled = true;
+                saveTaskBtn.textContent = 'Saving...';
+                
+                try {
+                    const formData = new FormData(form);
+                    
+                    // Handle checkbox - convert to 1 or 0
+                    const reminderCheckbox = document.getElementById('taskReminder');
+                    if (reminderCheckbox) {
+                        formData.set('reminder', reminderCheckbox.checked ? '1' : '0');
+                    }
+                    
+                    const url = taskId ? `/tasks/${taskId}` : '{{ route("tasks.store") }}';
+                    const method = taskId ? 'PUT' : 'POST';
+                    
+                    if (method === 'PUT') {
+                        formData.append('_method', 'PUT');
+                    }
+                    
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'text/html'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        // Force full page reload
+                        window.location.href = '{{ route("tasks.index") }}?_=' + Date.now();
+                    } else {
+                        alert('Error saving task. Please try again.');
+                        saveTaskBtn.disabled = false;
+                        saveTaskBtn.innerHTML = '💾 Save Task';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error saving task. Please try again.');
+                    saveTaskBtn.disabled = false;
+                    saveTaskBtn.innerHTML = '💾 Save Task';
+                }
+            });
+        }
+
+        // Add click handler for Add Task button
+        const addTaskBtn = document.getElementById('addTaskBtn');
+        if (addTaskBtn) {
+            addTaskBtn.addEventListener('click', function(e) {
+                console.log('Add Task button clicked');
+            });
+        }
+
+        // Reset form when modal is hidden
+        const modalElement = document.getElementById('addTaskModal');
+        if (modalElement) {
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                document.getElementById('taskForm').reset();
+                document.getElementById('taskId').value = '';
+                document.getElementById('reminderSettings').style.display = 'none';
+                document.getElementById('addTaskModalLabel').textContent = 'Add New Task';
+            });
+        }
+
+        // Tab switching event listeners
+        const activeTab = document.getElementById('active-tab');
+        const completedTab = document.getElementById('completed-tab');
+        
+        if (activeTab) {
+            activeTab.addEventListener('click', function() {
+                this.style.background = '#896C6C';
+                this.style.color = 'white';
+                document.getElementById('activeTaskCount').style.background = 'rgba(255,255,255,0.3)';
+                document.getElementById('activeTaskCount').style.color = 'white';
+                
+                completedTab.style.background = 'transparent';
+                completedTab.style.color = '#6c757d';
+                document.getElementById('completedTaskCount').style.background = '#6c757d';
+                document.getElementById('completedTaskCount').style.color = 'white';
+            });
+        }
+
+        if (completedTab) {
+            completedTab.addEventListener('click', function() {
+                this.style.background = '#6c757d';
+                this.style.color = 'white';
+                document.getElementById('completedTaskCount').style.background = 'rgba(255,255,255,0.3)';
+                document.getElementById('completedTaskCount').style.color = 'white';
+                
+                activeTab.style.background = 'transparent';
+                activeTab.style.color = '#896C6C';
+                document.getElementById('activeTaskCount').style.background = '#896C6C';
+                document.getElementById('activeTaskCount').style.color = 'white';
+            });
+        }
+
+        // Search and filter functionality
+        const searchInput = document.getElementById('searchTasks');
+        const filterSelect = document.getElementById('filterPriority');
+        
+        if (searchInput) {
+            searchInput.addEventListener('input', filterTasks);
+        }
+        
+        if (filterSelect) {
+            filterSelect.addEventListener('change', filterTasks);
+        }
+
+        // Initialize Flatpickr for datetime picker
         flatpickr("#taskDeadline", {
             enableTime: true,
             dateFormat: "Y-m-d H:i",
@@ -573,6 +640,31 @@
             altFormat: "F j, Y h:i K",
             minDate: "today"
         });
+
+        // Show success message if exists
+        @if(session('success'))
+            document.getElementById('toastMessage').textContent = '{{ session("success") }}';
+            const toast = new bootstrap.Toast(document.getElementById('successToast'));
+            toast.show();
+        @endif
     });
+    
+    // Pass tasks data to reminder system
+    window.pageTasksData = [
+        @foreach($tasks as $task)
+            {
+                id: {{ $task->id }},
+                title: "{{ addslashes($task->title) }}",
+                description: "{{ addslashes($task->description ?? '') }}",
+                status: "{{ $task->status }}",
+                priority: "{{ $task->priority }}",
+                deadline: "{{ $task->deadline ? $task->deadline->format('Y-m-d H:i:s') : '' }}",
+                reminder: {{ $task->reminder ? 'true' : 'false' }},
+                reminder_time: {{ $task->reminder_time ?? 15 }}
+            },
+        @endforeach
+    ];
+    console.log('Tasks loaded on page:', window.pageTasksData);
 </script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 @endpush

@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tasks/{task}/toggle', [TaskController::class, 'toggleComplete'])->name('tasks.toggle');
     Route::post('/tasks/{task}/toggle', [TaskController::class, 'toggleComplete']);
     Route::get('/api/tasks', [TaskController::class, 'index'])->name('api.tasks');
+    Route::get('/api/tasks/reminders', [TaskController::class, 'checkReminders'])->name('api.tasks.reminders');
     
     // Profile
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
@@ -52,6 +53,11 @@ Route::middleware('auth')->group(function () {
     // Calendar view
     Route::get('/calendar', [DashboardController::class, 'calendar'])->name('calendar');
     Route::get('/api/calendar/tasks', [DashboardController::class, 'calendarTasks'])->name('api.calendar.tasks');
+    
+    // Test reminder page
+    Route::get('/test-reminder', function () {
+        return view('test-reminder');
+    })->name('test.reminder');
 });
 
 // Admin routes
