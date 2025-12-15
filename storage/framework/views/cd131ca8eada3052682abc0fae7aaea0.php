@@ -430,6 +430,41 @@
             minDate: "today"
         });
     });
+    
+    // Pass tasks data to reminder system
+    window.pageTasksData = [
+        <?php if(isset($todayTasks)): ?>
+            <?php $__currentLoopData = $todayTasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                {
+                    id: <?php echo e($task->id); ?>,
+                    title: "<?php echo e(addslashes($task->title)); ?>",
+                    description: "<?php echo e(addslashes($task->description ?? '')); ?>",
+                    status: "<?php echo e($task->status); ?>",
+                    priority: "<?php echo e($task->priority); ?>",
+                    deadline: "<?php echo e($task->deadline ? $task->deadline->format('Y-m-d H:i:s') : ''); ?>",
+                    reminder: <?php echo e($task->reminder ? 'true' : 'false'); ?>,
+                    reminder_time: <?php echo e($task->reminder_time ?? 15); ?>
+
+                },
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php endif; ?>
+        <?php if(isset($upcomingTasks)): ?>
+            <?php $__currentLoopData = $upcomingTasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                {
+                    id: <?php echo e($task->id); ?>,
+                    title: "<?php echo e(addslashes($task->title)); ?>",
+                    description: "<?php echo e(addslashes($task->description ?? '')); ?>",
+                    status: "<?php echo e($task->status); ?>",
+                    priority: "<?php echo e($task->priority); ?>",
+                    deadline: "<?php echo e($task->deadline ? $task->deadline->format('Y-m-d H:i:s') : ''); ?>",
+                    reminder: <?php echo e($task->reminder ? 'true' : 'false'); ?>,
+                    reminder_time: <?php echo e($task->reminder_time ?? 15); ?>
+
+                },
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php endif; ?>
+    ];
+    console.log('Tasks loaded on page:', window.pageTasksData);
 </script>
 <?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>

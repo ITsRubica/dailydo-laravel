@@ -58,6 +58,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/test-reminder', function () {
         return view('test-reminder');
     })->name('test.reminder');
+    
+    // Test roles page
+    Route::get('/test-roles', function () {
+        return view('test-roles');
+    })->name('test.roles');
 });
 
 // Admin routes

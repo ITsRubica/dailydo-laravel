@@ -13,7 +13,7 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Check if admin user already exists
+        // Check if admin already exists
         $adminExists = User::where('email', 'admin@dailydo.com')->exists();
         
         if (!$adminExists) {
@@ -23,9 +23,10 @@ class AdminUserSeeder extends Seeder
                 'password' => Hash::make('admin123'),
                 'first_name' => 'Admin',
                 'last_name' => 'User',
-                'role' => 'admin',
                 'bio' => 'System Administrator',
-                'interests' => 'System Management',
+                'interests' => 'User Management, System Administration',
+                'role' => 'admin',
+                'current_streak' => 0,
             ]);
             
             $this->command->info('Admin user created successfully!');
